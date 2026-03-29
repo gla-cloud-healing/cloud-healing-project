@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: healing-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: healing-app
+  template:
+    metadata:
+      labels:
+        app: healing-app
+    spec:
+      containers:
+      - name: healing-app
+        image: healing-app:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 5000
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 5000
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 5000
+          initialDelaySeconds: 5
+          periodSeconds: 10
