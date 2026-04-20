@@ -20,18 +20,24 @@
 html{scroll-behavior:smooth}
 body{font-family:'DM Sans',sans-serif;background:var(--w);color:var(--ink);line-height:1.6;overflow-x:hidden}
 
+/* ── TOOLTIP ── */
+[data-tip]{position:relative;cursor:help}
+[data-tip]::after{content:attr(data-tip);position:absolute;bottom:calc(100% + 7px);left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;font-size:11px;font-family:'DM Sans',sans-serif;white-space:nowrap;padding:5px 10px;border-radius:7px;pointer-events:none;opacity:0;transition:opacity .18s;z-index:999}
+[data-tip]::before{content:'';position:absolute;bottom:calc(100% + 2px);left:50%;transform:translateX(-50%);border:5px solid transparent;border-top-color:var(--ink);pointer-events:none;opacity:0;transition:opacity .18s;z-index:999}
+[data-tip]:hover::after,[data-tip]:hover::before{opacity:1}
+
 /* NAV */
 nav{position:fixed;top:0;left:0;right:0;z-index:300;display:flex;align-items:center;justify-content:space-between;padding:0 clamp(16px,4vw,48px);height:60px;background:rgba(255,255,255,0.95);backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
 .nav-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:18px;letter-spacing:-.5px}
 .nav-logo span{color:var(--blue)}
 .nav-links{display:flex;gap:clamp(14px,3vw,30px)}
-.nav-links a{font-size:14px;font-weight:500;color:var(--ink2);text-decoration:none;transition:color .2s}
-.nav-links a:hover{color:var(--blue)}
+.nav-links a{font-size:14px;font-weight:500;color:var(--ink2);text-decoration:none;transition:color .2s;padding:4px 0;border-bottom:2px solid transparent}
+.nav-links a:hover{color:var(--blue);border-bottom-color:var(--blue-m)}
 .nav-btn{background:var(--ink);color:#fff;border:none;border-radius:8px;padding:8px 20px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;cursor:pointer;transition:background .2s}
 .nav-btn:hover{background:var(--blue)}
 @media(max-width:600px){.nav-links{display:none}}
 
-/* MODAL OVERLAY */
+/* MODAL */
 .modal-overlay{display:none;position:fixed;inset:0;z-index:500;background:rgba(0,0,0,0.45);backdrop-filter:blur(4px);align-items:center;justify-content:center;padding:20px}
 .modal-overlay.open{display:flex;animation:fadeIn .2s ease}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
@@ -127,7 +133,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:300;display:flex;align-items:cen
 .tech-role{font-size:11px;color:var(--muted)}
 .tech-week{display:inline-block;margin-top:7px;font-size:10px;font-family:'DM Mono',monospace;background:var(--blue-l);color:var(--blue);border-radius:4px;padding:2px 7px}
 
-/* PROJECT SHOWCASE (replaces team) */
+/* SHOWCASE */
 .showcase-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(clamp(200px,28vw,280px),1fr));gap:16px;margin-top:clamp(28px,5vh,48px)}
 .showcase-card{background:var(--w);border:1.5px solid var(--border);border-radius:var(--r);padding:clamp(18px,2.5vw,26px);cursor:pointer;transition:all .2s;position:relative;overflow:hidden}
 .showcase-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px}
@@ -156,7 +162,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:300;display:flex;align-items:cen
 .step-tag{display:inline-block;margin-top:10px;font-size:10px;font-family:'DM Mono',monospace;background:var(--off);border:1px solid var(--border);border-radius:4px;padding:2px 7px;color:var(--ink2)}
 .click-hint{font-size:10px;color:var(--blue);margin-top:8px;display:flex;align-items:center;gap:4px}
 
-/* DASHBOARD */
+/* DASHBOARD TOPBAR */
 .db-topbar{display:flex;align-items:center;justify-content:space-between;background:var(--w);border:1.5px solid var(--border);border-radius:var(--r);padding:clamp(12px,1.5vh,16px) clamp(14px,2vw,22px);margin-bottom:14px;flex-wrap:wrap;gap:10px}
 .db-title{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(13px,2vw,17px)}
 .db-right{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
@@ -164,6 +170,11 @@ nav{position:fixed;top:0;left:0;right:0;z-index:300;display:flex;align-items:cen
 .s-dot{width:8px;height:8px;border-radius:50%;background:#22c55e;animation:blink 2s infinite;flex-shrink:0}
 .s-dot.red{background:var(--red);box-shadow:0 0 7px rgba(192,57,43,.5)}
 .db-clock{font-family:'DM Mono',monospace;font-size:12px;color:var(--muted)}
+
+/* SECTION HEADER HELPER */
+.sec-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px}
+.sec-hd-title{font-family:'Syne',sans-serif;font-weight:700;font-size:15px;color:var(--ink)}
+.sec-hd-sub{font-size:12px;color:var(--muted)}
 
 /* METRICS */
 .metrics-row{display:grid;grid-template-columns:repeat(2,1fr);gap:13px;margin-bottom:14px}
@@ -256,16 +267,95 @@ nav{position:fixed;top:0;left:0;right:0;z-index:300;display:flex;align-items:cen
 .btn-info{display:inline-flex;align-items:center;gap:6px;background:var(--blue-l);color:var(--blue);border:1px solid var(--blue-m);border-radius:8px;padding:9px 16px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:all .2s}
 .btn-info:hover{background:var(--blue);color:#fff}
 
+/* ── NEW: DOCKER CONTAINER STATUS ── */
+.docker-section{background:var(--w);border:1.5px solid var(--border);border-radius:var(--r);padding:clamp(14px,2vw,22px);margin-bottom:14px}
+.docker-topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px}
+.docker-title{font-family:'Syne',sans-serif;font-weight:700;font-size:14px;display:flex;align-items:center;gap:8px}
+.docker-controls{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.docker-search{background:var(--off);border:1.5px solid var(--border);border-radius:8px;padding:6px 12px;font-family:'DM Sans',sans-serif;font-size:12px;color:var(--ink);outline:none;width:180px;transition:border-color .2s}
+.docker-search:focus{border-color:var(--blue)}
+.docker-search::placeholder{color:var(--muted)}
+.docker-filter{background:var(--off);border:1.5px solid var(--border);border-radius:8px;padding:6px 10px;font-family:'DM Sans',sans-serif;font-size:12px;color:var(--ink);cursor:pointer;outline:none;transition:border-color .2s}
+.docker-filter:focus{border-color:var(--blue)}
+.docker-refresh{display:inline-flex;align-items:center;gap:5px;background:var(--blue-l);color:var(--blue);border:1px solid var(--blue-m);border-radius:8px;padding:6px 12px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;cursor:pointer;transition:all .2s}
+.docker-refresh:hover{background:var(--blue);color:#fff}
+.docker-refresh.spinning .refresh-icon{animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* CONTAINER CARDS GRID */
+.container-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
+.container-card{background:var(--off);border:1.5px solid var(--border);border-radius:10px;padding:14px 16px;cursor:pointer;transition:all .2s;position:relative;overflow:hidden}
+.container-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;border-radius:10px 0 0 10px}
+.container-card.running::before{background:#22c55e}
+.container-card.stopped::before{background:var(--red)}
+.container-card.restarting::before{background:#f59e0b}
+.container-card.paused::before{background:var(--muted)}
+.container-card:hover{box-shadow:var(--shadow);transform:translateY(-2px);border-color:var(--border2)}
+.container-card.running:hover{border-color:#86efac}
+.container-card.stopped:hover{border-color:#fca5a5}
+
+.cc-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.cc-name{display:flex;align-items:center;gap:8px}
+.cc-icon{font-size:18px}
+.cc-title{font-family:'Syne',sans-serif;font-weight:700;font-size:13px;color:var(--ink)}
+.cc-status-badge{font-size:10px;font-family:'DM Mono',monospace;padding:3px 9px;border-radius:20px;font-weight:500;display:flex;align-items:center;gap:4px}
+.cc-status-badge.running{background:var(--green-l);color:var(--green)}
+.cc-status-badge.stopped{background:var(--red-l);color:var(--red)}
+.cc-status-badge.restarting{background:var(--amber-l);color:var(--amber)}
+.cc-status-badge.paused{background:var(--off);color:var(--muted);border:1px solid var(--border)}
+.cc-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.cc-dot.running{background:#22c55e;animation:blink 2s infinite}
+.cc-dot.stopped{background:var(--red)}
+.cc-dot.restarting{background:#f59e0b;animation:blink .8s infinite}
+
+.cc-image{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);margin-bottom:10px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cc-stats{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:10px}
+.cc-stat{background:var(--w);border-radius:6px;padding:7px 9px;border:1px solid var(--border)}
+.cc-stat-lbl{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px}
+.cc-stat-val{font-family:'DM Mono',monospace;font-size:11px;color:var(--ink2);font-weight:500}
+.cc-stat-bar{height:3px;background:var(--border);border-radius:2px;margin-top:4px;overflow:hidden}
+.cc-stat-fill{height:100%;border-radius:2px;transition:width .6s ease}
+.cc-stat-fill.cpu{background:var(--blue)}
+.cc-stat-fill.mem{background:#22c55e}
+
+.cc-footer{display:flex;align-items:center;justify-content:space-between;font-size:10px;color:var(--muted);font-family:'DM Mono',monospace}
+.cc-uptime{display:flex;align-items:center;gap:4px}
+.cc-port{background:var(--blue-l);color:var(--blue);padding:2px 7px;border-radius:4px;font-size:10px}
+
+.cc-actions{display:flex;gap:6px;margin-top:10px}
+.cc-btn{flex:1;padding:6px 8px;border-radius:6px;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:500;border:1.5px solid var(--border);background:var(--w);color:var(--ink2);cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:4px}
+.cc-btn:hover{border-color:var(--blue);color:var(--blue);background:var(--blue-l)}
+.cc-btn.danger:hover{border-color:var(--red);color:var(--red);background:var(--red-l)}
+.cc-btn.success-btn:hover{border-color:var(--green);color:var(--green);background:var(--green-l)}
+
+/* DOCKER SUMMARY ROW */
+.docker-summary{display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap}
+.docker-sum-item{display:flex;align-items:center;gap:6px;background:var(--off);border:1px solid var(--border);border-radius:8px;padding:6px 12px;font-size:12px}
+.docker-sum-dot{width:8px;height:8px;border-radius:50%}
+.docker-sum-dot.green{background:#22c55e}
+.docker-sum-dot.red{background:var(--red)}
+.docker-sum-dot.amber{background:#f59e0b}
+.docker-sum-dot.gray{background:var(--muted)}
+.docker-sum-count{font-family:'Syne',sans-serif;font-weight:700;font-size:13px;color:var(--ink)}
+.docker-sum-label{color:var(--muted)}
+
+/* EMPTY STATE */
+.docker-empty{text-align:center;padding:32px 20px;color:var(--muted)}
+.docker-empty-icon{font-size:32px;margin-bottom:8px}
+.docker-empty-text{font-size:13px}
+
 /* FOOTER */
 footer{background:var(--ink);color:#fff;padding:clamp(28px,5vh,44px) clamp(20px,5vw,48px);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px}
 .f-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:16px}
 .f-logo span{color:var(--blue)}
 .f-right{font-size:12px;color:#555;text-align:right}
+
+/* HELP HINT */
+.help-hint{display:inline-flex;align-items:center;gap:5px;font-size:11px;color:var(--muted);background:var(--off);border:1px solid var(--border);border-radius:20px;padding:4px 10px;margin-bottom:16px}
 </style>
 </head>
 <body>
 
-<!-- MODAL -->
 <div class="modal-overlay" id="modal-overlay" onclick="closeModal(event)">
   <div class="modal" id="modal-box">
     <button class="modal-close" onclick="closeModal()">✕</button>
@@ -282,6 +372,7 @@ footer{background:var(--ink);color:#fff;padding:clamp(28px,5vh,44px) clamp(20px,
     <a href="#stack">Stack</a>
     <a href="#how">Workflow</a>
     <a href="#project">Project</a>
+    <a href="#docker-live">Containers</a>
     <a href="#dashboard">Dashboard</a>
   </div>
   <button class="nav-btn" onclick="go('#dashboard')">Live Dashboard</button>
@@ -299,10 +390,10 @@ footer{background:var(--ink);color:#fff;padding:clamp(28px,5vh,44px) clamp(20px,
     <a href="#how" class="btn-s">How it works</a>
   </div>
   <div class="hero-stats">
-    <div class="stat" onclick="openModal('pods-stat')"><div class="stat-num">3</div><div class="stat-label">K8s Pods</div></div>
-    <div class="stat" onclick="openModal('recovery-stat')"><div class="stat-num">&lt;30s</div><div class="stat-label">Recovery Time</div></div>
-    <div class="stat" onclick="openModal('tools-stat')"><div class="stat-num">5</div><div class="stat-label">Core Tools</div></div>
-    <div class="stat" onclick="openModal('uptime-stat')"><div class="stat-num">24/7</div><div class="stat-label">Auto Monitor</div></div>
+    <div class="stat" onclick="openModal('pods-stat')" data-tip="Click to learn more"><div class="stat-num">3</div><div class="stat-label">K8s Pods</div></div>
+    <div class="stat" onclick="openModal('recovery-stat')" data-tip="Click to learn more"><div class="stat-num">&lt;30s</div><div class="stat-label">Recovery Time</div></div>
+    <div class="stat" onclick="openModal('tools-stat')" data-tip="Click to learn more"><div class="stat-num">5</div><div class="stat-label">Core Tools</div></div>
+    <div class="stat" onclick="openModal('uptime-stat')" data-tip="Click to learn more"><div class="stat-num">24/7</div><div class="stat-label">Auto Monitor</div></div>
   </div>
 </section>
 
@@ -313,14 +404,14 @@ footer{background:var(--ink);color:#fff;padding:clamp(28px,5vh,44px) clamp(20px,
     <div class="ttl">Tools we built with</div>
     <div class="sub">Click any tool to learn more about its role in the system.</div>
     <div class="tech-grid">
-      <div class="tech-card" onclick="openModal('docker')"><div class="tech-icon">🐳</div><div class="tech-name">Docker</div><div class="tech-role">Containerization</div><div class="tech-week">Week 2</div></div>
-      <div class="tech-card" onclick="openModal('kubernetes')"><div class="tech-icon">☸️</div><div class="tech-name">Kubernetes</div><div class="tech-role">Orchestration</div><div class="tech-week">Week 3</div></div>
-      <div class="tech-card" onclick="openModal('prometheus')"><div class="tech-icon">📡</div><div class="tech-name">Prometheus</div><div class="tech-role">Monitoring</div><div class="tech-week">Week 4</div></div>
-      <div class="tech-card" onclick="openModal('grafana')"><div class="tech-icon">📊</div><div class="tech-name">Grafana</div><div class="tech-role">Visualization</div><div class="tech-week">Week 5</div></div>
-      <div class="tech-card" onclick="openModal('python')"><div class="tech-icon">🐍</div><div class="tech-name">Python</div><div class="tech-role">Automation</div><div class="tech-week">Week 6</div></div>
-      <div class="tech-card" onclick="openModal('aws')"><div class="tech-icon">☁️</div><div class="tech-name">AWS</div><div class="tech-role">Cloud Platform</div><div class="tech-week">Week 1</div></div>
-      <div class="tech-card" onclick="openModal('flask')"><div class="tech-icon">🌐</div><div class="tech-name">Flask</div><div class="tech-role">Web App</div><div class="tech-week">Week 2</div></div>
-      <div class="tech-card" onclick="openModal('compose')"><div class="tech-icon">🔧</div><div class="tech-name">Compose</div><div class="tech-role">Integration</div><div class="tech-week">Week 7</div></div>
+      <div class="tech-card" onclick="openModal('docker')" data-tip="Containerization"><div class="tech-icon">🐳</div><div class="tech-name">Docker</div><div class="tech-role">Containerization</div><div class="tech-week">Week 2</div></div>
+      <div class="tech-card" onclick="openModal('kubernetes')" data-tip="Orchestration"><div class="tech-icon">☸️</div><div class="tech-name">Kubernetes</div><div class="tech-role">Orchestration</div><div class="tech-week">Week 3</div></div>
+      <div class="tech-card" onclick="openModal('prometheus')" data-tip="Monitoring"><div class="tech-icon">📡</div><div class="tech-name">Prometheus</div><div class="tech-role">Monitoring</div><div class="tech-week">Week 4</div></div>
+      <div class="tech-card" onclick="openModal('grafana')" data-tip="Visualization"><div class="tech-icon">📊</div><div class="tech-name">Grafana</div><div class="tech-role">Visualization</div><div class="tech-week">Week 5</div></div>
+      <div class="tech-card" onclick="openModal('python')" data-tip="Automation"><div class="tech-icon">🐍</div><div class="tech-name">Python</div><div class="tech-role">Automation</div><div class="tech-week">Week 6</div></div>
+      <div class="tech-card" onclick="openModal('aws')" data-tip="Cloud Platform"><div class="tech-icon">☁️</div><div class="tech-name">AWS</div><div class="tech-role">Cloud Platform</div><div class="tech-week">Week 1</div></div>
+      <div class="tech-card" onclick="openModal('flask')" data-tip="Web App"><div class="tech-icon">🌐</div><div class="tech-name">Flask</div><div class="tech-role">Web App</div><div class="tech-week">Week 2</div></div>
+      <div class="tech-card" onclick="openModal('compose')" data-tip="Integration"><div class="tech-icon">🔧</div><div class="tech-name">Compose</div><div class="tech-role">Integration</div><div class="tech-week">Week 7</div></div>
     </div>
   </div>
 </section>
@@ -342,55 +433,70 @@ footer{background:var(--ink);color:#fff;padding:clamp(28px,5vh,44px) clamp(20px,
   </div>
 </div>
 
-<!-- PROJECT SHOWCASE (replaces team) -->
+<!-- PROJECT SHOWCASE -->
 <section id="project">
   <div class="sec">
     <div class="lbl">Project Highlights</div>
     <div class="ttl">What we achieved</div>
     <div class="sub">Click any card to explore the details of each achievement.</div>
     <div class="showcase-grid">
-      <div class="showcase-card c1" onclick="openModal('ach-selfheal')">
-        <div class="sc-icon">🔄</div>
-        <div class="sc-title">Self-Healing in &lt;30s</div>
-        <div class="sc-desc">System detects failure, restarts container and confirms recovery — fully automated.</div>
-        <div class="sc-footer"><span class="sc-tag">healing_script.py</span><span class="sc-arrow">→</span></div>
-      </div>
-      <div class="showcase-card c2" onclick="openModal('ach-k8s')">
-        <div class="sc-icon">☸️</div>
-        <div class="sc-title">3-Pod K8s Cluster</div>
-        <div class="sc-desc">Kubernetes runs 3 replicas. Delete any pod — a new one appears in seconds.</div>
-        <div class="sc-footer"><span class="sc-tag">deployment.yaml</span><span class="sc-arrow">→</span></div>
-      </div>
-      <div class="showcase-card c3" onclick="openModal('ach-monitor')">
-        <div class="sc-icon">📡</div>
-        <div class="sc-title">Real-Time Monitoring</div>
-        <div class="sc-desc">Prometheus collects 4+ metrics every 15 seconds — CPU, memory, requests, latency.</div>
-        <div class="sc-footer"><span class="sc-tag">prometheus.yml</span><span class="sc-arrow">→</span></div>
-      </div>
-      <div class="showcase-card c4" onclick="openModal('ach-alerts')">
-        <div class="sc-icon">🚨</div>
-        <div class="sc-title">Automated Alerting</div>
-        <div class="sc-desc">Every incident logged in alerts.log with timestamp. Critical events trigger auto-recovery.</div>
-        <div class="sc-footer"><span class="sc-tag">alerts.log</span><span class="sc-arrow">→</span></div>
-      </div>
-      <div class="showcase-card c5" onclick="openModal('ach-dashboard')">
-        <div class="sc-icon">📊</div>
-        <div class="sc-title">Grafana Dashboard</div>
-        <div class="sc-desc">Beautiful real-time charts showing request rate, latency and system health metrics.</div>
-        <div class="sc-footer"><span class="sc-tag">localhost:3000</span><span class="sc-arrow">→</span></div>
-      </div>
-      <div class="showcase-card c6" onclick="openModal('ach-integration')">
-        <div class="sc-icon">🔧</div>
-        <div class="sc-title">One-Command Deploy</div>
-        <div class="sc-desc">docker-compose up -d starts the entire system — app, Prometheus and Grafana together.</div>
-        <div class="sc-footer"><span class="sc-tag">docker-compose.yml</span><span class="sc-arrow">→</span></div>
-      </div>
+      <div class="showcase-card c1" onclick="openModal('ach-selfheal')"><div class="sc-icon">🔄</div><div class="sc-title">Self-Healing in &lt;30s</div><div class="sc-desc">System detects failure, restarts container and confirms recovery — fully automated.</div><div class="sc-footer"><span class="sc-tag">healing_script.py</span><span class="sc-arrow">→</span></div></div>
+      <div class="showcase-card c2" onclick="openModal('ach-k8s')"><div class="sc-icon">☸️</div><div class="sc-title">3-Pod K8s Cluster</div><div class="sc-desc">Kubernetes runs 3 replicas. Delete any pod — a new one appears in seconds.</div><div class="sc-footer"><span class="sc-tag">deployment.yaml</span><span class="sc-arrow">→</span></div></div>
+      <div class="showcase-card c3" onclick="openModal('ach-monitor')"><div class="sc-icon">📡</div><div class="sc-title">Real-Time Monitoring</div><div class="sc-desc">Prometheus collects 4+ metrics every 15 seconds — CPU, memory, requests, latency.</div><div class="sc-footer"><span class="sc-tag">prometheus.yml</span><span class="sc-arrow">→</span></div></div>
+      <div class="showcase-card c4" onclick="openModal('ach-alerts')"><div class="sc-icon">🚨</div><div class="sc-title">Automated Alerting</div><div class="sc-desc">Every incident logged in alerts.log with timestamp. Critical events trigger auto-recovery.</div><div class="sc-footer"><span class="sc-tag">alerts.log</span><span class="sc-arrow">→</span></div></div>
+      <div class="showcase-card c5" onclick="openModal('ach-dashboard')"><div class="sc-icon">📊</div><div class="sc-title">Grafana Dashboard</div><div class="sc-desc">Beautiful real-time charts showing request rate, latency and system health metrics.</div><div class="sc-footer"><span class="sc-tag">localhost:3000</span><span class="sc-arrow">→</span></div></div>
+      <div class="showcase-card c6" onclick="openModal('ach-integration')"><div class="sc-icon">🔧</div><div class="sc-title">One-Command Deploy</div><div class="sc-desc">docker-compose up -d starts the entire system — app, Prometheus and Grafana together.</div><div class="sc-footer"><span class="sc-tag">docker-compose.yml</span><span class="sc-arrow">→</span></div></div>
     </div>
   </div>
 </section>
 
+<!-- ── NEW: DOCKER CONTAINER STATUS ── -->
+<div id="docker-live" class="sec-bg">
+  <div class="sec-bg-in">
+    <div class="lbl">Live Containers</div>
+    <div class="ttl">Docker Container Status</div>
+    <div class="sub">Real-time status of all running Docker containers. Click any container for details.</div>
+
+    <div class="docker-section">
+      <div class="docker-topbar">
+        <div class="docker-title">
+          🐳 Active Containers
+          <span class="badge b" id="docker-total-badge">4 Total</span>
+        </div>
+        <div class="docker-controls">
+          <input class="docker-search" type="text" placeholder="Search containers..." id="docker-search" oninput="filterContainers()">
+          <select class="docker-filter" id="docker-filter" onchange="filterContainers()">
+            <option value="all">All Status</option>
+            <option value="running">Running</option>
+            <option value="stopped">Stopped</option>
+            <option value="restarting">Restarting</option>
+          </select>
+          <button class="docker-refresh" id="docker-refresh-btn" onclick="refreshContainers()" data-tip="Refresh container status">
+            <span class="refresh-icon">↺</span> Refresh
+          </button>
+        </div>
+      </div>
+
+      <div class="docker-summary" id="docker-summary">
+        <div class="docker-sum-item"><div class="docker-sum-dot green"></div><span class="docker-sum-count" id="sum-running">3</span><span class="docker-sum-label">Running</span></div>
+        <div class="docker-sum-item"><div class="docker-sum-dot red"></div><span class="docker-sum-count" id="sum-stopped">1</span><span class="docker-sum-label">Stopped</span></div>
+        <div class="docker-sum-item"><div class="docker-sum-dot amber"></div><span class="docker-sum-count" id="sum-restarting">0</span><span class="docker-sum-label">Restarting</span></div>
+        <div class="docker-sum-item"><div class="docker-sum-dot gray"></div><span class="docker-sum-count" id="sum-total">4</span><span class="docker-sum-label">Total</span></div>
+      </div>
+
+      <div class="help-hint">💡 Tip: Click any container card to view logs and take actions</div>
+
+      <div class="container-grid" id="container-grid"></div>
+      <div class="docker-empty" id="docker-empty" style="display:none">
+        <div class="docker-empty-icon">🔍</div>
+        <div class="docker-empty-text">No containers match your search</div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- DASHBOARD -->
-<div id="dashboard" class="sec-bg">
+<div id="dashboard" class="sec-bg" style="background:var(--w)">
   <div class="sec-bg-in">
     <div class="lbl">Live Dashboard</div>
     <div class="ttl">System monitoring</div>
@@ -405,10 +511,10 @@ footer{background:var(--ink);color:#fff;padding:clamp(28px,5vh,44px) clamp(20px,
     </div>
 
     <div class="metrics-row">
-      <div class="m-card cg" onclick="openModal('m-pods')"><div class="m-lbl">Pods Running</div><div class="m-val g" id="pods-val">3 / 3</div><div class="m-sub up" id="pods-sub">All healthy</div></div>
-      <div class="m-card cb" onclick="openModal('m-req')"><div class="m-lbl">Total Requests</div><div class="m-val b" id="req-val">1,284</div><div class="m-sub up">+12 / min</div></div>
-      <div class="m-card ca" onclick="openModal('m-rec')"><div class="m-lbl">Avg Recovery</div><div class="m-val a">18s</div><div class="m-sub up">This session</div></div>
-      <div class="m-card cr" onclick="openModal('m-heal')"><div class="m-lbl">Self-Heals</div><div class="m-val b" id="heal-val">2</div><div class="m-sub up" id="heal-sub">All successful</div></div>
+      <div class="m-card cg" onclick="openModal('m-pods')" data-tip="Kubernetes pod count"><div class="m-lbl">Pods Running</div><div class="m-val g" id="pods-val">3 / 3</div><div class="m-sub up" id="pods-sub">All healthy</div></div>
+      <div class="m-card cb" onclick="openModal('m-req')" data-tip="Total HTTP requests"><div class="m-lbl">Total Requests</div><div class="m-val b" id="req-val">1,284</div><div class="m-sub up">+12 / min</div></div>
+      <div class="m-card ca" onclick="openModal('m-rec')" data-tip="Average recovery time"><div class="m-lbl">Avg Recovery</div><div class="m-val a">18s</div><div class="m-sub up">This session</div></div>
+      <div class="m-card cr" onclick="openModal('m-heal')" data-tip="Self-healing count"><div class="m-lbl">Self-Heals</div><div class="m-val b" id="heal-val">2</div><div class="m-sub up" id="heal-sub">All successful</div></div>
     </div>
 
     <div class="db-grid">
@@ -429,7 +535,7 @@ footer{background:var(--ink);color:#fff;padding:clamp(28px,5vh,44px) clamp(20px,
           </div>
         </div>
         <div class="btn-row">
-          <button class="btn-crash" id="btn-crash" onclick="simulateCrash()">⚡ Simulate Crash</button>
+          <button class="btn-crash" id="btn-crash" onclick="simulateCrash()" data-tip="Simulates a pod failure">⚡ Simulate Crash</button>
           <button class="btn-heal" id="btn-heal" onclick="triggerHeal()">♻ Self-Heal</button>
           <button class="btn-info" onclick="openModal('k8s-info')">ℹ Info</button>
         </div>
@@ -439,10 +545,10 @@ footer{background:var(--ink);color:#fff;padding:clamp(28px,5vh,44px) clamp(20px,
         <div class="db-hd">Request Rate &amp; Resources <span class="badge b">Live</span></div>
         <div class="chart-bars" id="chart"></div>
         <div style="height:1px;background:var(--border);margin:10px 0 12px"></div>
-        <div class="p-row" onclick="openModal('res-cpu')"><div class="p-lbl"><span>CPU Usage</span><span id="c-pct">34%</span></div><div class="p-track"><div class="p-fill b" id="c-bar" style="width:34%"></div></div></div>
-        <div class="p-row" onclick="openModal('res-mem')"><div class="p-lbl"><span>Memory Usage</span><span id="m-pct">52%</span></div><div class="p-track"><div class="p-fill g" id="m-bar" style="width:52%"></div></div></div>
-        <div class="p-row" onclick="openModal('res-net')"><div class="p-lbl"><span>Network I/O</span><span id="n-pct">18%</span></div><div class="p-track"><div class="p-fill a" id="n-bar" style="width:18%"></div></div></div>
-        <div class="p-row" onclick="openModal('res-disk')"><div class="p-lbl"><span>Disk Usage</span><span id="d-pct">44%</span></div><div class="p-track"><div class="p-fill b" id="d-bar" style="width:44%"></div></div></div>
+        <div class="p-row" onclick="openModal('res-cpu')" data-tip="CPU utilization"><div class="p-lbl"><span>CPU Usage</span><span id="c-pct">34%</span></div><div class="p-track"><div class="p-fill b" id="c-bar" style="width:34%"></div></div></div>
+        <div class="p-row" onclick="openModal('res-mem')" data-tip="RAM consumption"><div class="p-lbl"><span>Memory Usage</span><span id="m-pct">52%</span></div><div class="p-track"><div class="p-fill g" id="m-bar" style="width:52%"></div></div></div>
+        <div class="p-row" onclick="openModal('res-net')" data-tip="Network traffic"><div class="p-lbl"><span>Network I/O</span><span id="n-pct">18%</span></div><div class="p-track"><div class="p-fill a" id="n-bar" style="width:18%"></div></div></div>
+        <div class="p-row" onclick="openModal('res-disk')" data-tip="Disk space used"><div class="p-lbl"><span>Disk Usage</span><span id="d-pct">44%</span></div><div class="p-track"><div class="p-fill b" id="d-bar" style="width:44%"></div></div></div>
       </div>
 
       <div class="db-card">
@@ -484,91 +590,230 @@ footer{background:var(--ink);color:#fff;padding:clamp(28px,5vh,44px) clamp(20px,
 </footer>
 
 <script>
+// ── DOCKER CONTAINERS DATA ──
+const CONTAINERS_DATA = [
+  {id:'c1',name:'my-app',image:'healing-app:latest',status:'running',cpu:34,mem:52,port:'5000:5000',uptime:'2h 14m',network:'monitoring',volumes:'./app:/app',restarts:0},
+  {id:'c2',name:'prometheus',image:'prom/prometheus:latest',status:'running',cpu:12,mem:38,port:'9090:9090',uptime:'2h 14m',network:'monitoring',volumes:'./monitoring:/etc/prometheus',restarts:0},
+  {id:'c3',name:'grafana',image:'grafana/grafana:latest',status:'running',cpu:8,mem:45,port:'3000:3000',uptime:'2h 13m',network:'monitoring',volumes:'grafana-storage:/var/lib/grafana',restarts:1},
+  {id:'c4',name:'healing-monitor',image:'python:3.11-slim',status:'stopped',cpu:0,mem:0,port:'—',uptime:'Stopped',network:'monitoring',volumes:'./automation:/app',restarts:2},
+];
+
+let containers = JSON.parse(JSON.stringify(CONTAINERS_DATA));
+
+function statusIcon(s){ return s==='running'?'🟢':s==='stopped'?'🔴':s==='restarting'?'🟡':'⚫'; }
+
+function renderContainers(){
+  const search = document.getElementById('docker-search').value.toLowerCase();
+  const filter = document.getElementById('docker-filter').value;
+  const filtered = containers.filter(c=>{
+    const matchSearch = c.name.includes(search)||c.image.includes(search);
+    const matchFilter = filter==='all'||c.status===filter;
+    return matchSearch&&matchFilter;
+  });
+  const grid = document.getElementById('container-grid');
+  const empty = document.getElementById('docker-empty');
+  if(filtered.length===0){ grid.innerHTML=''; empty.style.display='block'; return; }
+  empty.style.display='none';
+  grid.innerHTML = filtered.map(c=>{
+    const isRunning = c.status==='running';
+    const cpuW = isRunning?c.cpu:0;
+    const memW = isRunning?c.mem:0;
+    return `<div class="container-card ${c.status}" onclick="openContainerModal('${c.id}')">
+      <div class="cc-header">
+        <div class="cc-name">
+          <span class="cc-icon">${c.name==='my-app'?'🌐':c.name==='prometheus'?'📡':c.name==='grafana'?'📊':'🐍'}</span>
+          <span class="cc-title">${c.name}</span>
+        </div>
+        <div class="cc-status-badge ${c.status}">
+          <div class="cc-dot ${c.status}"></div>
+          ${c.status.charAt(0).toUpperCase()+c.status.slice(1)}
+        </div>
+      </div>
+      <div class="cc-image" title="${c.image}">${c.image}</div>
+      ${isRunning?`
+      <div class="cc-stats">
+        <div class="cc-stat">
+          <div class="cc-stat-lbl">CPU</div>
+          <div class="cc-stat-val">${c.cpu}%</div>
+          <div class="cc-stat-bar"><div class="cc-stat-fill cpu" style="width:${cpuW}%"></div></div>
+        </div>
+        <div class="cc-stat">
+          <div class="cc-stat-lbl">Memory</div>
+          <div class="cc-stat-val">${c.mem}%</div>
+          <div class="cc-stat-bar"><div class="cc-stat-fill mem" style="width:${memW}%"></div></div>
+        </div>
+      </div>`:`<div style="padding:10px 0;font-size:11px;color:var(--muted);font-family:'DM Mono',monospace">Container is not running</div>`}
+      <div class="cc-footer">
+        <div class="cc-uptime">⏱ ${c.uptime}</div>
+        ${c.port!=='—'?`<div class="cc-port">${c.port}</div>`:``}
+      </div>
+      <div class="cc-actions" onclick="event.stopPropagation()">
+        ${isRunning
+          ?`<button class="cc-btn danger" onclick="stopContainer('${c.id}')">⏹ Stop</button>
+             <button class="cc-btn" onclick="restartContainer('${c.id}')">↺ Restart</button>`
+          :`<button class="cc-btn success-btn" onclick="startContainer('${c.id}')">▶ Start</button>`}
+        <button class="cc-btn" onclick="viewLogs('${c.id}')">📋 Logs</button>
+      </div>
+    </div>`;
+  }).join('');
+  updateDockerSummary();
+}
+
+function updateDockerSummary(){
+  const running = containers.filter(c=>c.status==='running').length;
+  const stopped = containers.filter(c=>c.status==='stopped').length;
+  const restarting = containers.filter(c=>c.status==='restarting').length;
+  document.getElementById('sum-running').textContent=running;
+  document.getElementById('sum-stopped').textContent=stopped;
+  document.getElementById('sum-restarting').textContent=restarting;
+  document.getElementById('sum-total').textContent=containers.length;
+  document.getElementById('docker-total-badge').textContent=containers.length+' Total';
+}
+
+function filterContainers(){ renderContainers(); }
+
+function refreshContainers(){
+  const btn = document.getElementById('docker-refresh-btn');
+  btn.classList.add('spinning');
+  btn.disabled=true;
+  containers.forEach(c=>{ if(c.status==='running'){ c.cpu=Math.max(5,Math.min(80,c.cpu+Math.floor(Math.random()*10)-5)); c.mem=Math.max(20,Math.min(85,c.mem+Math.floor(Math.random()*6)-3)); }});
+  setTimeout(()=>{ renderContainers(); btn.classList.remove('spinning'); btn.disabled=false; toast('success','Refreshed','Container stats updated.',2000); },900);
+}
+
+function stopContainer(id){
+  const c=containers.find(x=>x.id===id); if(!c||c.status!=='running') return;
+  c.status='stopped'; c.uptime='Stopped'; c.cpu=0; c.mem=0;
+  renderContainers();
+  toast('warning','Container Stopped',`${c.name} has been stopped.`,3000);
+  addLog('lwn',`[STOP] Container ${c.name} stopped manually`);
+}
+
+function startContainer(id){
+  const c=containers.find(x=>x.id===id); if(!c||c.status!=='running') return;
+  c.status='restarting'; renderContainers();
+  toast('info','Starting...', `${c.name} is starting up...`,2000);
+  setTimeout(()=>{ c.status='running'; c.uptime='0m'; c.cpu=15; c.mem=30; renderContainers(); toast('success','Container Started',`${c.name} is now running.`,3000); addLog('lok',`[START] Container ${c.name} started`); },1800);
+}
+
+function restartContainer(id){
+  const c=containers.find(x=>x.id===id); if(!c) return;
+  c.status='restarting'; renderContainers();
+  toast('info','Restarting...',`${c.name} is restarting...`,2000);
+  setTimeout(()=>{ c.status='running'; c.restarts++; c.uptime='0m'; c.cpu=20; c.mem=35; renderContainers(); toast('success','Restarted',`${c.name} restarted successfully.`,3000); addLog('lin',`[RESTART] Container ${c.name} restarted`); },2000);
+}
+
+function viewLogs(id){
+  const c=containers.find(x=>x.id===id); if(!c) return;
+  const logs = c.status==='running'
+    ? `[${nowT()}] Container ${c.name} running\n[${nowT()}] Health check: OK\n[${nowT()}] Serving on port ${c.port}\n[${nowT()}] Memory: ${c.mem}% | CPU: ${c.cpu}%`
+    : `[${nowT()}] Container ${c.name} stopped\n[${nowT()}] Exit code: 0`;
+  openModal('_logs_'+c.id, c.name+' — Logs', c.image, `<div style="background:#0d1117;border-radius:10px;padding:14px;font-family:'DM Mono',monospace;font-size:11px;line-height:2;color:#3fb950">${logs.split('\n').map(l=>`<div>${l}</div>`).join('')}</div>`);
+}
+
+function openContainerModal(id){
+  const c=containers.find(x=>x.id===id); if(!c) return;
+  const icon=c.name==='my-app'?'🌐':c.name==='prometheus'?'📡':c.name==='grafana'?'📊':'🐍';
+  const body=`<p>Docker container <strong>${c.name}</strong> — current status: <strong>${c.status}</strong></p><div class="modal-divider"></div>
+    <div class="modal-kv"><span class="modal-kv-k">Image</span><span class="modal-kv-v">${c.image}</span></div>
+    <div class="modal-kv"><span class="modal-kv-k">Status</span><span class="modal-kv-v">${c.status}</span></div>
+    <div class="modal-kv"><span class="modal-kv-k">Port Mapping</span><span class="modal-kv-v">${c.port}</span></div>
+    <div class="modal-kv"><span class="modal-kv-k">Uptime</span><span class="modal-kv-v">${c.uptime}</span></div>
+    <div class="modal-kv"><span class="modal-kv-k">Network</span><span class="modal-kv-v">${c.network}</span></div>
+    <div class="modal-kv"><span class="modal-kv-k">Volumes</span><span class="modal-kv-v">${c.volumes}</span></div>
+    <div class="modal-kv"><span class="modal-kv-k">Restarts</span><span class="modal-kv-v">${c.restarts}</span></div>
+    ${c.status==='running'?`<div class="modal-kv"><span class="modal-kv-k">CPU Usage</span><span class="modal-kv-v">${c.cpu}%</span></div><div class="modal-kv"><span class="modal-kv-k">Memory</span><span class="modal-kv-v">${c.mem}%</span></div>`:''}`;
+  openModal('_container_', icon, c.name, 'docker container', body);
+}
+
+// Generic openModal with optional raw body
+function openModal(key, rawIcon, rawTitle, rawSub, rawBody){
+  let d;
+  if(rawBody!==undefined){ d={icon:rawIcon,title:rawTitle,sub:rawSub||'',body:rawBody}; }
+  else { d=MODALS[key]; if(!d) return; }
+  document.getElementById('modal-content').innerHTML=`<div class="modal-icon">${d.icon}</div><div class="modal-title">${d.title}</div><div class="modal-subtitle">${d.sub}</div><div class="modal-body">${d.body}</div>`;
+  document.getElementById('modal-overlay').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+
+function closeModal(e){
+  if(e&&e.target!==document.getElementById('modal-overlay')) return;
+  document.getElementById('modal-overlay').classList.remove('open');
+  document.body.style.overflow='';
+}
+document.addEventListener('keydown',e=>{if(e.key==='Escape') closeModal();});
+
 // ── MODAL DATA ──
-const MODALS = {
+const MODALS={
   gla:{icon:'🏛️',title:'GLA University',sub:'Mathura | Greater Noida',body:`<p>This project was developed as a <strong>Mini Project</strong> for the Department of Computer Science at GLA University, Mathura.</p><p>Submitted to <strong>Dr. Monica Dutta</strong>, Assistant Professor, under the guidance of the CS department.</p><div class="modal-divider"></div><div class="modal-kv"><span class="modal-kv-k">University</span><span class="modal-kv-v">GLA University</span></div><div class="modal-kv"><span class="modal-kv-k">Department</span><span class="modal-kv-v">Computer Science</span></div><div class="modal-kv"><span class="modal-kv-k">Session</span><span class="modal-kv-v">2024–25</span></div><div class="modal-kv"><span class="modal-kv-k">Grade</span><span class="modal-kv-v">A+ (NAAC Accredited)</span></div>`},
   'pods-stat':{icon:'☸️',title:'3 Kubernetes Pods',sub:'High Availability Architecture',body:`<p>The system runs <strong>3 replicas</strong> of the Flask application using Kubernetes Deployment. This ensures high availability — even if 2 pods crash simultaneously, the third keeps serving users.</p><div class="modal-divider"></div><div class="modal-kv"><span class="modal-kv-k">Replicas</span><span class="modal-kv-v">3 pods always running</span></div><div class="modal-kv"><span class="modal-kv-k">Self-heal time</span><span class="modal-kv-v">Under 5 seconds</span></div><div class="modal-kv"><span class="modal-kv-k">Health check</span><span class="modal-kv-v">Every 10 seconds</span></div><div class="modal-kv"><span class="modal-kv-k">Config file</span><span class="modal-kv-v">deployment.yaml</span></div>`},
   'recovery-stat':{icon:'⚡',title:'Under 30s Recovery',sub:'Automated Incident Response',body:`<p>From the moment a failure is detected to full system recovery takes <strong>under 30 seconds</strong>. The Python script detects failure in 10–20 seconds and restarts the container in under 5 seconds.</p><div class="modal-divider"></div><div class="modal-kv"><span class="modal-kv-k">Detection time</span><span class="modal-kv-v">10–20 seconds</span></div><div class="modal-kv"><span class="modal-kv-k">Restart time</span><span class="modal-kv-v">Under 5 seconds</span></div><div class="modal-kv"><span class="modal-kv-k">Total recovery</span><span class="modal-kv-v">&lt; 30 seconds</span></div><div class="modal-kv"><span class="modal-kv-k">Human needed?</span><span class="modal-kv-v">None</span></div>`},
   'tools-stat':{icon:'🔧',title:'5 Core Tools',sub:'Modern DevOps Stack',body:`<p>The project integrates <strong>5 core DevOps tools</strong> working together seamlessly to form a complete self-healing system.</p><div class="modal-tag-row"><span class="modal-tag b">Docker</span><span class="modal-tag b">Kubernetes</span><span class="modal-tag r">Prometheus</span><span class="modal-tag a">Grafana</span><span class="modal-tag g">Python</span><span class="modal-tag p">Flask</span><span class="modal-tag b">AWS</span><span class="modal-tag g">Compose</span></div>`},
   'uptime-stat':{icon:'📡',title:'24/7 Auto Monitoring',sub:'Always-on health checking',body:`<p>The Python healing script runs in an <strong>infinite loop</strong>, checking the application health endpoint every 10 seconds — day and night without any human involvement.</p><div class="modal-divider"></div><div class="modal-kv"><span class="modal-kv-k">Check interval</span><span class="modal-kv-v">Every 10 seconds</span></div><div class="modal-kv"><span class="modal-kv-k">Prometheus scrape</span><span class="modal-kv-v">Every 15 seconds</span></div><div class="modal-kv"><span class="modal-kv-k">Alert threshold</span><span class="modal-kv-v">2 consecutive failures</span></div><div class="modal-kv"><span class="modal-kv-k">Log file</span><span class="modal-kv-v">alerts.log (timestamped)</span></div>`},
-  docker:{icon:'🐳',title:'Docker',sub:'Containerization — Week 2',body:`<p>Docker packages the Flask application and all its dependencies into a <strong>lightweight container image</strong>. This ensures the app runs identically on any machine — no "it works on my computer" problems.</p><p>Key file: <strong>Dockerfile</strong> — defines the build steps from base Python image to running app.</p><div class="modal-divider"></div><div class="modal-kv"><span class="modal-kv-k">Base image</span><span class="modal-kv-v">python:3.11-slim</span></div><div class="modal-kv"><span class="modal-kv-k">Exposed port</span><span class="modal-kv-v">5000</span></div><div class="modal-kv"><span class="modal-kv-k">Build command</span><span class="modal-kv-v">docker build -t healing-app .</span></div><div class="modal-kv"><span class="modal-kv-k">Run command</span><span class="modal-kv-v">docker run -d -p 5000:5000</span></div><div class="modal-tag-row"><span class="modal-tag b">Dockerfile</span><span class="modal-tag b">requirements.txt</span><span class="modal-tag b">app.py</span></div>`},
-  kubernetes:{icon:'☸️',title:'Kubernetes',sub:'Container Orchestration — Week 3',body:`<p>Kubernetes is the <strong>orchestration layer</strong> that manages all Docker containers. It runs 3 replicas of the app, load balances traffic between them, and automatically replaces any crashed pods.</p><p>The <strong>livenessProbe</strong> calls /health every 10 seconds. If it fails, Kubernetes restarts the pod automatically.</p><div class="modal-divider"></div><div class="modal-kv"><span class="modal-kv-k">Replicas</span><span class="modal-kv-v">3 pods</span></div><div class="modal-kv"><span class="modal-kv-k">Health check</span><span class="modal-kv-v">GET /health every 10s</span></div><div class="modal-kv"><span class="modal-kv-k">Config</span><span class="modal-kv-v">deployment.yaml + service.yaml</span></div><div class="modal-kv"><span class="modal-kv-k">Platform</span><span class="modal-kv-v">Docker Desktop (local)</span></div>`},
-  prometheus:{icon:'📡',title:'Prometheus',sub:'Metrics Monitoring — Week 4',body:`<p>Prometheus is an <strong>open-source monitoring tool</strong> that scrapes performance metrics from the Flask app every 15 seconds. It stores these in a time-series database for analysis and alerting.</p><p>Metrics collected: request count, request latency, CPU usage, memory consumption, network activity.</p><div class="modal-divider"></div><div class="modal-kv"><span class="modal-kv-k">Scrape interval</span><span class="modal-kv-v">Every 15 seconds</span></div><div class="modal-kv"><span class="modal-kv-k">Metrics endpoint</span><span class="modal-kv-v">localhost:5000/metrics</span></div><div class="modal-kv"><span class="modal-kv-k">Dashboard</span><span class="modal-kv-v">localhost:9090</span></div><div class="modal-kv"><span class="modal-kv-k">Config file</span><span class="modal-kv-v">monitoring/prometheus.yml</span></div>`},
-  grafana:{icon:'📊',title:'Grafana',sub:'Visualization Dashboard — Week 5',body:`<p>Grafana connects to Prometheus and displays all metrics as <strong>beautiful real-time charts</strong>. Administrators can see request rates, response times, and system health at a glance.</p><div class="modal-divider"></div><div class="modal-kv"><span class="modal-kv-k">Dashboard name</span><span class="modal-kv-v">Self-Healing Cloud Dashboard</span></div><div class="modal-kv"><span class="modal-kv-k">Data source</span><span class="modal-kv-v">Prometheus</span></div><div class="modal-kv"><span class="modal-kv-k">Access URL</span><span class="modal-kv-v">localhost:3000</span></div><div class="modal-kv"><span class="modal-kv-k">Login</span><span class="modal-kv-v">admin / admin123</span></div>`},
-  python:{icon:'🐍',title:'Python',sub:'Automation Scripts — Week 6',body:`<p>Python powers the <strong>healing_script.py</strong> — the brain of the self-healing system. It runs in an infinite loop, checking the app health endpoint every 10 seconds and automatically restarting the Docker container if 2 consecutive failures are detected.</p><div class="modal-divider"></div><div class="modal-kv"><span class="modal-kv-k">Check interval</span><span class="modal-kv-v">Every 10 seconds</span></div><div class="modal-kv"><span class="modal-kv-k">Failure threshold</span><span class="modal-kv-v">2 consecutive failures</span></div><div class="modal-kv"><span class="modal-kv-k">Recovery action</span><span class="modal-kv-v">docker restart my-app</span></div><div class="modal-kv"><span class="modal-kv-k">Libraries used</span><span class="modal-kv-v">requests, subprocess, datetime</span></div>`},
-  aws:{icon:'☁️',title:'AWS Free Tier',sub:'Cloud Infrastructure — Week 1',body:`<p>Amazon Web Services provides the <strong>cloud infrastructure</strong> for hosting the application in production. The Free Tier account gives access to EC2 instances, S3 storage, and load balancing without cost.</p><div class="modal-divider"></div><div class="modal-kv"><span class="modal-kv-k">Account type</span><span class="modal-kv-v">Free Tier</span></div><div class="modal-kv"><span class="modal-kv-k">Services used</span><span class="modal-kv-v">EC2, S3, Load Balancer</span></div><div class="modal-kv"><span class="modal-kv-k">Region</span><span class="modal-kv-v">ap-south-1 (Mumbai)</span></div>`},
-  flask:{icon:'🌐',title:'Flask',sub:'Web Application — Week 2',body:`<p>Flask is a lightweight Python web framework used to build the <strong>self-healing app</strong>. It has 3 routes: home page, /health endpoint for Kubernetes probes, and /metrics endpoint for Prometheus scraping.</p><div class="modal-divider"></div><div class="modal-kv"><span class="modal-kv-k">Route /</span><span class="modal-kv-v">Home page</span></div><div class="modal-kv"><span class="modal-kv-k">Route /health</span><span class="modal-kv-v">Returns {"status":"healthy"}</span></div><div class="modal-kv"><span class="modal-kv-k">Route /metrics</span><span class="modal-kv-v">Prometheus metrics data</span></div><div class="modal-kv"><span class="modal-kv-k">Port</span><span class="modal-kv-v">5000</span></div>`},
-  compose:{icon:'🔧',title:'Docker Compose',sub:'Service Integration — Week 7',body:`<p>Docker Compose is the <strong>integration layer</strong> that starts all services with a single command. It creates a shared network so all containers can communicate using service names instead of IP addresses.</p><div class="modal-divider"></div><div class="modal-kv"><span class="modal-kv-k">Command</span><span class="modal-kv-v">docker-compose up -d</span></div><div class="modal-kv"><span class="modal-kv-k">Services</span><span class="modal-kv-v">healing-app, prometheus, grafana</span></div><div class="modal-kv"><span class="modal-kv-k">Network</span><span class="modal-kv-v">monitoring (bridge)</span></div><div class="modal-kv"><span class="modal-kv-k">Config file</span><span class="modal-kv-v">docker-compose.yml</span></div>`},
-  step1:{icon:'🚀',title:'Step 1: App Deployment',sub:'docker-compose up -d',body:`<p>The Flask web application is packaged inside a Docker container using the Dockerfile. Docker Compose then starts the app along with Prometheus and Grafana using a single command.</p><p><strong>What happens:</strong> Docker builds the image, creates 3 Kubernetes pods from deployment.yaml, and the service.yaml exposes the app on port 80.</p><div class="modal-divider"></div><div class="modal-kv"><span class="modal-kv-k">Files involved</span><span class="modal-kv-v">Dockerfile, docker-compose.yml</span></div><div class="modal-kv"><span class="modal-kv-k">K8s file</span><span class="modal-kv-v">deployment.yaml + service.yaml</span></div><div class="modal-kv"><span class="modal-kv-k">Result</span><span class="modal-kv-v">App running at localhost:5000</span></div>`},
-  step2:{icon:'📡',title:'Step 2: Metrics Collection',sub:'prometheus.yml — every 15 seconds',body:`<p>Prometheus continuously scrapes the <strong>/metrics endpoint</strong> of the Flask app. The prometheus_client Python library automatically exports metrics like request count and response latency.</p><p><strong>Metrics collected:</strong> app_request_count_total, app_request_latency_seconds, plus system-level CPU and memory.</p><div class="modal-divider"></div><div class="modal-kv"><span class="modal-kv-k">Scrape endpoint</span><span class="modal-kv-v">localhost:5000/metrics</span></div><div class="modal-kv"><span class="modal-kv-k">Interval</span><span class="modal-kv-v">Every 15 seconds</span></div><div class="modal-kv"><span class="modal-kv-k">Storage</span><span class="modal-kv-v">Time-series database</span></div>`},
-  step3:{icon:'📊',title:'Step 3: Visualization',sub:'Grafana Dashboard — localhost:3000',body:`<p>Grafana pulls data from Prometheus and displays it as <strong>interactive charts</strong>. The "Self-Healing Cloud Dashboard" shows request rates, latency, CPU usage, and memory in real time.</p><div class="modal-divider"></div><div class="modal-kv"><span class="modal-kv-k">Dashboard URL</span><span class="modal-kv-v">localhost:3000</span></div><div class="modal-kv"><span class="modal-kv-k">Data source</span><span class="modal-kv-v">Prometheus</span></div><div class="modal-kv"><span class="modal-kv-k">Refresh rate</span><span class="modal-kv-v">Every 30 seconds (configurable)</span></div>`},
-  step4:{icon:'🔍',title:'Step 4: Failure Detection',sub:'healing_script.py — checks every 10s',body:`<p>The Python automation script runs in an <strong>infinite loop</strong> calling GET /health every 10 seconds. If the response is not 200 OK or if a ConnectionError occurs, the failure counter increments.</p><p><strong>Threshold:</strong> 2 consecutive failures = CRITICAL alert and auto-recovery triggered.</p><div class="modal-divider"></div><div class="modal-kv"><span class="modal-kv-k">Check URL</span><span class="modal-kv-v">localhost:5000/health</span></div><div class="modal-kv"><span class="modal-kv-k">Check interval</span><span class="modal-kv-v">10 seconds</span></div><div class="modal-kv"><span class="modal-kv-k">Timeout</span><span class="modal-kv-v">5 seconds per request</span></div><div class="modal-kv"><span class="modal-kv-k">Trigger threshold</span><span class="modal-kv-v">2 consecutive failures</span></div>`},
-  step5:{icon:'🔄',title:'Step 5: Auto Recovery',sub:'docker restart my-app',body:`<p>When 2 consecutive failures are detected, the script logs a CRITICAL alert and calls <strong>subprocess.run(["docker", "restart", "my-app"])</strong> to restart the container automatically.</p><p>After restarting, it waits 5 seconds then confirms recovery by checking /health again.</p><div class="modal-divider"></div><div class="modal-kv"><span class="modal-kv-k">Recovery command</span><span class="modal-kv-v">docker restart my-app</span></div><div class="modal-kv"><span class="modal-kv-k">Wait after restart</span><span class="modal-kv-v">5 seconds</span></div><div class="modal-kv"><span class="modal-kv-k">Logged to</span><span class="modal-kv-v">automation/alerts.log</span></div>`},
-  step6:{icon:'☸️',title:'Step 6: K8s Self-Healing',sub:'kubectl get pods — instant replacement',body:`<p>At the Kubernetes level, the <strong>livenessProbe</strong> in deployment.yaml calls /health every 10 seconds. If it fails, Kubernetes automatically restarts the pod. If a pod is deleted entirely, Kubernetes creates a new one within seconds to maintain 3 replicas.</p><div class="modal-divider"></div><div class="modal-kv"><span class="modal-kv-k">Probe type</span><span class="modal-kv-v">livenessProbe + readinessProbe</span></div><div class="modal-kv"><span class="modal-kv-k">Probe path</span><span class="modal-kv-v">GET /health</span></div><div class="modal-kv"><span class="modal-kv-k">Replacement time</span><span class="modal-kv-v">Under 5 seconds</span></div><div class="modal-kv"><span class="modal-kv-k">Demo command</span><span class="modal-kv-v">kubectl delete pod &lt;name&gt;</span></div>`},
-  'ach-selfheal':{icon:'🔄',title:'Self-Healing in &lt;30 Seconds',sub:'Core project achievement',body:`<p>The complete self-healing cycle — from crash detection to confirmed recovery — completes in under 30 seconds with <strong>zero human involvement</strong>.</p><div class="modal-divider"></div><div class="modal-kv"><span class="modal-kv-k">1. Detect failure</span><span class="modal-kv-v">10–20 seconds</span></div><div class="modal-kv"><span class="modal-kv-k">2. Log CRITICAL alert</span><span class="modal-kv-v">Instant</span></div><div class="modal-kv"><span class="modal-kv-k">3. Restart container</span><span class="modal-kv-v">Under 5 seconds</span></div><div class="modal-kv"><span class="modal-kv-k">4. Confirm recovery</span><span class="modal-kv-v">10 seconds</span></div><div class="modal-kv"><span class="modal-kv-k">Total</span><span class="modal-kv-v">&lt; 30 seconds</span></div>`},
-  'ach-k8s':{icon:'☸️',title:'3-Pod Kubernetes Cluster',sub:'Infrastructure-level self-healing',body:`<p>Kubernetes maintains exactly <strong>3 running replicas</strong> at all times. Delete any pod and watch a new one appear instantly. This is the infrastructure layer of self-healing.</p><div class="modal-divider"></div><div class="modal-kv"><span class="modal-kv-k">Demo command</span><span class="modal-kv-v">kubectl delete pod &lt;name&gt;</span></div><div class="modal-kv"><span class="modal-kv-k">Replacement time</span><span class="modal-kv-v">Under 5 seconds</span></div><div class="modal-kv"><span class="modal-kv-k">Config</span><span class="modal-kv-v">replicas: 3 in deployment.yaml</span></div>`},
-  'ach-monitor':{icon:'📡',title:'Real-Time Monitoring',sub:'Prometheus metrics every 15s',body:`<p>Prometheus collects 4 key metrics every 15 seconds from the running application, storing them for analysis and alert generation.</p><div class="modal-tag-row"><span class="modal-tag r">app_request_count_total</span><span class="modal-tag r">app_request_latency_seconds</span><span class="modal-tag b">cpu_usage</span><span class="modal-tag g">memory_consumption</span></div>`},
-  'ach-alerts':{icon:'🚨',title:'Automated Alerting System',sub:'alerts.log with full timestamps',body:`<p>Every event — healthy checks, warnings, failures, restarts and recoveries — is logged to <strong>alerts.log</strong> with a precise timestamp. This creates a complete audit trail of system behavior.</p><div class="modal-divider"></div><div class="modal-kv"><span class="modal-kv-k">Log file</span><span class="modal-kv-v">automation/alerts.log</span></div><div class="modal-kv"><span class="modal-kv-k">Format</span><span class="modal-kv-v">[YYYY-MM-DD HH:MM:SS] [TYPE] message</span></div><div class="modal-kv"><span class="modal-kv-k">View command</span><span class="modal-kv-v">type automation\\alerts.log</span></div>`},
-  'ach-dashboard':{icon:'📊',title:'Grafana Dashboard',sub:'Real-time visual monitoring',body:`<p>The <strong>Self-Healing Cloud Dashboard</strong> in Grafana shows live charts for request rate, latency, and system health. Data updates automatically from Prometheus every 30 seconds.</p><div class="modal-divider"></div><div class="modal-kv"><span class="modal-kv-k">URL</span><span class="modal-kv-v">http://localhost:3000</span></div><div class="modal-kv"><span class="modal-kv-k">Login</span><span class="modal-kv-v">admin / admin123</span></div><div class="modal-kv"><span class="modal-kv-k">Query 1</span><span class="modal-kv-v">app_request_count_total</span></div><div class="modal-kv"><span class="modal-kv-k">Query 2</span><span class="modal-kv-v">rate(app_request_count_total[1m])</span></div>`},
-  'ach-integration':{icon:'🔧',title:'One-Command Deployment',sub:'docker-compose up -d',body:`<p>docker-compose.yml integrates all 3 services into a single configuration. All services share a <strong>monitoring network</strong> so they can communicate by service name.</p><div class="modal-divider"></div><div class="modal-kv"><span class="modal-kv-k">Start all</span><span class="modal-kv-v">docker-compose up -d</span></div><div class="modal-kv"><span class="modal-kv-k">Stop all</span><span class="modal-kv-v">docker-compose down</span></div><div class="modal-kv"><span class="modal-kv-k">Services</span><span class="modal-kv-v">my-app · prometheus · grafana</span></div>`},
-  'm-pods':{icon:'☸️',title:'Pods Running Metric',sub:'Kubernetes replica status',body:`<p>Shows the ratio of <strong>currently running pods</strong> to desired replicas. Should always show 3/3. When a pod crashes, this drops to 2/3 until Kubernetes replaces it.</p><div class="modal-kv"><span class="modal-kv-k">Desired</span><span class="modal-kv-v">3 replicas</span></div><div class="modal-kv"><span class="modal-kv-k">Current</span><span class="modal-kv-v">3 Running</span></div><div class="modal-kv"><span class="modal-kv-k">Check with</span><span class="modal-kv-v">kubectl get pods</span></div>`},
-  'm-req':{icon:'📊',title:'Total Requests Metric',sub:'app_request_count_total',body:`<p>Counts every HTTP request received by the Flask application since startup. Tracked using Prometheus <strong>Counter</strong> — it only goes up, never down.</p><div class="modal-kv"><span class="modal-kv-k">Metric name</span><span class="modal-kv-v">app_request_count_total</span></div><div class="modal-kv"><span class="modal-kv-k">Type</span><span class="modal-kv-v">Counter (always increasing)</span></div><div class="modal-kv"><span class="modal-kv-k">Labels</span><span class="modal-kv-v">method, endpoint, status</span></div>`},
-  'm-rec':{icon:'⚡',title:'Average Recovery Time',sub:'Crash to healthy in under 30s',body:`<p>Measures how long the self-healing cycle takes from <strong>first failure detected</strong> to <strong>confirmed recovery</strong>. Our system averages 18 seconds.</p><div class="modal-kv"><span class="modal-kv-k">Detection</span><span class="modal-kv-v">10–20 seconds</span></div><div class="modal-kv"><span class="modal-kv-k">Container restart</span><span class="modal-kv-v">Under 5 seconds</span></div><div class="modal-kv"><span class="modal-kv-k">Confirmation</span><span class="modal-kv-v">Next health check ~10s</span></div>`},
-  'm-heal':{icon:'🔄',title:'Self-Heals Counter',sub:'Total automated recoveries',body:`<p>Counts how many times the system has <strong>automatically healed itself</strong> during this session. Each successful recovery increments this counter.</p><div class="modal-kv"><span class="modal-kv-k">Today</span><span class="modal-kv-v">2 successful heals</span></div><div class="modal-kv"><span class="modal-kv-k">Success rate</span><span class="modal-kv-v">100%</span></div><div class="modal-kv"><span class="modal-kv-k">Logged in</span><span class="modal-kv-v">automation/alerts.log</span></div>`},
-  pod1:{icon:'🟢',title:'Pod: bz8w5',sub:'healing-app-688885fcc9-bz8w5',body:`<p>This pod is <strong>healthy and serving traffic</strong>. It has been running since deployment with 0 restarts, indicating stable operation.</p><div class="modal-kv"><span class="modal-kv-k">Status</span><span class="modal-kv-v">Running</span></div><div class="modal-kv"><span class="modal-kv-k">Restarts</span><span class="modal-kv-v">0</span></div><div class="modal-kv"><span class="modal-kv-k">Container</span><span class="modal-kv-v">healing-app:latest</span></div><div class="modal-kv"><span class="modal-kv-k">Port</span><span class="modal-kv-v">5000/TCP</span></div>`},
-  pod2:{icon:'🟢',title:'Pod: q2qbz',sub:'healing-app-688885fcc9-q2qbz',body:`<p>This pod is <strong>healthy and serving traffic</strong>. Running smoothly with 0 restarts.</p><div class="modal-kv"><span class="modal-kv-k">Status</span><span class="modal-kv-v">Running</span></div><div class="modal-kv"><span class="modal-kv-k">Restarts</span><span class="modal-kv-v">0</span></div><div class="modal-kv"><span class="modal-kv-k">Container</span><span class="modal-kv-v">healing-app:latest</span></div><div class="modal-kv"><span class="modal-kv-k">Port</span><span class="modal-kv-v">5000/TCP</span></div>`},
-  pod3:{icon:'🟡',title:'Pod: dgx9n',sub:'healing-app-688885fcc9-dgx9n',body:`<p>This pod was <strong>auto-created by Kubernetes</strong> to replace a previously deleted pod. It has 1 restart recorded — proof that the self-healing system worked!</p><div class="modal-kv"><span class="modal-kv-k">Status</span><span class="modal-kv-v">Running</span></div><div class="modal-kv"><span class="modal-kv-k">Restarts</span><span class="modal-kv-v">1 (self-healed)</span></div><div class="modal-kv"><span class="modal-kv-k">Auto-replaced?</span><span class="modal-kv-v">Yes — by Kubernetes</span></div>`},
-  'k8s-info':{icon:'☸️',title:'Kubernetes Self-Healing',sub:'How the demo works',body:`<p>Click <strong>Simulate Crash</strong> to watch a pod fail. The Python script detects the failure and shows CRITICAL alert. Click <strong>Self-Heal</strong> to trigger automatic recovery.</p><p>In real operation this happens completely automatically — no button clicking needed!</p><div class="modal-divider"></div><div class="modal-kv"><span class="modal-kv-k">Detection by</span><span class="modal-kv-v">healing_script.py</span></div><div class="modal-kv"><span class="modal-kv-k">Recovery by</span><span class="modal-kv-v">docker restart my-app</span></div><div class="modal-kv"><span class="modal-kv-k">K8s recovery by</span><span class="modal-kv-v">kubectl auto-replace pod</span></div>`},
-  'res-cpu':{icon:'💻',title:'CPU Usage',sub:'Processor utilization',body:`<p>Shows current CPU utilization of the Docker container running the Flask app. Normal range is <strong>20–50%</strong>. Spikes above 80% may indicate high traffic or an issue.</p><div class="modal-kv"><span class="modal-kv-k">Current</span><span class="modal-kv-v">~34% (normal)</span></div><div class="modal-kv"><span class="modal-kv-k">Alert threshold</span><span class="modal-kv-v">80%</span></div><div class="modal-kv"><span class="modal-kv-k">Prometheus query</span><span class="modal-kv-v">rate(container_cpu_usage[1m])</span></div>`},
-  'res-mem':{icon:'🧠',title:'Memory Usage',sub:'RAM consumption',body:`<p>Shows how much RAM the application is consuming. Flask + prometheus_client typically uses <strong>40–60%</strong> of allocated container memory.</p><div class="modal-kv"><span class="modal-kv-k">Current</span><span class="modal-kv-v">~52% (normal)</span></div><div class="modal-kv"><span class="modal-kv-k">Alert threshold</span><span class="modal-kv-v">85%</span></div><div class="modal-kv"><span class="modal-kv-k">Prometheus query</span><span class="modal-kv-v">container_memory_usage_bytes</span></div>`},
-  'res-net':{icon:'🌐',title:'Network I/O',sub:'Incoming and outgoing traffic',body:`<p>Measures the rate of <strong>network data transfer</strong> to and from the application container. Low values (under 30%) indicate normal operation.</p><div class="modal-kv"><span class="modal-kv-k">Current</span><span class="modal-kv-v">~18% (low — healthy)</span></div><div class="modal-kv"><span class="modal-kv-k">Includes</span><span class="modal-kv-v">HTTP requests + Prometheus scrapes</span></div>`},
-  'res-disk':{icon:'💾',title:'Disk Usage',sub:'Storage consumption',body:`<p>Shows how much disk space the container and application logs are consuming. Should remain stable and low for a lightweight Flask app.</p><div class="modal-kv"><span class="modal-kv-k">Current</span><span class="modal-kv-v">~44% (normal)</span></div><div class="modal-kv"><span class="modal-kv-k">Alert threshold</span><span class="modal-kv-v">85%</span></div>`},
-  'act-success':{icon:'✅',title:'Self-Healing Successful',sub:'11:51:41 — System restored',body:`<p>The self-healing cycle completed successfully. The application was <strong>automatically restored</strong> after detecting 2 consecutive failures. Total recovery time: ~18 seconds.</p><div class="modal-kv"><span class="modal-kv-k">Action taken</span><span class="modal-kv-v">docker restart my-app</span></div><div class="modal-kv"><span class="modal-kv-k">Recovery time</span><span class="modal-kv-v">~18 seconds</span></div><div class="modal-kv"><span class="modal-kv-k">Human needed?</span><span class="modal-kv-v">None</span></div>`},
-  'act-restart':{icon:'♻',title:'Container Restarted',sub:'11:51:36 — Auto-recovery action',body:`<p>The Python script executed <strong>docker restart my-app</strong> automatically after detecting 2 consecutive failures. The container restarted within 5 seconds.</p><div class="modal-kv"><span class="modal-kv-k">Command run</span><span class="modal-kv-v">subprocess.run(["docker","restart","my-app"])</span></div><div class="modal-kv"><span class="modal-kv-k">Logged in</span><span class="modal-kv-v">alerts.log</span></div>`},
-  'act-critical':{icon:'🔴',title:'Critical Alert Triggered',sub:'11:51:36 — 2 failures detected',body:`<p>After detecting <strong>2 consecutive failures</strong>, the system escalated to CRITICAL status and automatically triggered the self-healing recovery mechanism.</p><div class="modal-kv"><span class="modal-kv-k">Failure count</span><span class="modal-kv-v">2 (threshold reached)</span></div><div class="modal-kv"><span class="modal-kv-k">Next action</span><span class="modal-kv-v">docker restart my-app</span></div><div class="modal-kv"><span class="modal-kv-k">Logged as</span><span class="modal-kv-v">[CRITICAL] in alerts.log</span></div>`},
-  'act-warn':{icon:'⚠',title:'Warning Alert',sub:'Failure count incrementing',body:`<p>A WARNING is logged each time a health check fails. After <strong>2 warnings</strong> the system escalates to CRITICAL and triggers auto-recovery.</p><div class="modal-kv"><span class="modal-kv-k">Type</span><span class="modal-kv-v">WARNING</span></div><div class="modal-kv"><span class="modal-kv-k">Cause</span><span class="modal-kv-v">Health check returned non-200</span></div><div class="modal-kv"><span class="modal-kv-k">Critical at</span><span class="modal-kv-v">Count = 2</span></div>`},
-  'act-down':{icon:'🔴',title:'App Down Detected',sub:'Connection failed to /health',body:`<p>The Python script received a <strong>ConnectionError</strong> when trying to call localhost:5000/health. This means the Flask container stopped responding.</p><div class="modal-kv"><span class="modal-kv-k">Error type</span><span class="modal-kv-v">ConnectionError</span></div><div class="modal-kv"><span class="modal-kv-k">Endpoint checked</span><span class="modal-kv-v">http://localhost:5000/health</span></div><div class="modal-kv"><span class="modal-kv-k">Timeout</span><span class="modal-kv-v">5 seconds</span></div>`},
-  'act-ok':{icon:'✅',title:'Health Check Passed',sub:'App is responding normally',body:`<p>The health check to <strong>/health</strong> returned HTTP 200 with {"status":"healthy"}. This means the app is running correctly and serving requests.</p><div class="modal-kv"><span class="modal-kv-k">URL checked</span><span class="modal-kv-v">http://localhost:5000/health</span></div><div class="modal-kv"><span class="modal-kv-k">Response</span><span class="modal-kv-v">200 OK — {"status":"healthy"}</span></div><div class="modal-kv"><span class="modal-kv-k">Next check</span><span class="modal-kv-v">In 10 seconds</span></div>`},
-  'log-start':{icon:'🚀',title:'Monitor Started',sub:'[START] log entry',body:`<p>The self-healing monitor (healing_script.py) was started. It will now check app health every 10 seconds indefinitely until stopped with Ctrl+C.</p><div class="modal-kv"><span class="modal-kv-k">Command</span><span class="modal-kv-v">python automation/healing_script.py</span></div><div class="modal-kv"><span class="modal-kv-k">Check interval</span><span class="modal-kv-v">10 seconds</span></div>`},
-  'log-ok':{icon:'✅',title:'Healthy Check Log',sub:'[OK] log entry',body:`<p>The app responded with HTTP 200 to the /health endpoint. The failure counter is reset to 0. System is operating normally.</p><div class="modal-kv"><span class="modal-kv-k">Response</span><span class="modal-kv-v">HTTP 200 OK</span></div><div class="modal-kv"><span class="modal-kv-k">Failure count</span><span class="modal-kv-v">Reset to 0</span></div>`},
-  'log-down':{icon:'🔴',title:'App Down Log Entry',sub:'[DOWN] — ConnectionError',body:`<p>A ConnectionError was received when checking /health. The app is not responding. Failure counter incremented by 1.</p><div class="modal-kv"><span class="modal-kv-k">Error</span><span class="modal-kv-v">ConnectionError</span></div><div class="modal-kv"><span class="modal-kv-k">Failure count</span><span class="modal-kv-v">+1</span></div><div class="modal-kv"><span class="modal-kv-k">Next check</span><span class="modal-kv-v">In 10 seconds</span></div>`},
-  'log-warn':{icon:'⚠',title:'Warning Log Entry',sub:'[WARNING] — Count incrementing',body:`<p>A WARNING is logged to alerts.log. If the count reaches 2, CRITICAL alert is triggered and auto-recovery begins immediately.</p><div class="modal-kv"><span class="modal-kv-k">Type</span><span class="modal-kv-v">WARNING</span></div><div class="modal-kv"><span class="modal-kv-k">Critical triggers at</span><span class="modal-kv-v">Count = 2</span></div>`},
-  'log-critical':{icon:'🚨',title:'Critical Log Entry',sub:'[CRITICAL] — Self-healing triggered',body:`<p>2 consecutive failures reached the threshold. CRITICAL alert logged. Auto-recovery initiated immediately by calling docker restart.</p><div class="modal-kv"><span class="modal-kv-k">Threshold</span><span class="modal-kv-v">2 consecutive failures</span></div><div class="modal-kv"><span class="modal-kv-k">Action</span><span class="modal-kv-v">docker restart my-app</span></div>`},
-  'log-restart':{icon:'♻',title:'Restart Log Entry',sub:'[RESTART] — Container restarting',body:`<p>The Python script called subprocess.run(["docker","restart","my-app"]) to restart the crashed container. After restarting, the script waits 5 seconds then checks health again.</p><div class="modal-kv"><span class="modal-kv-k">Command</span><span class="modal-kv-v">docker restart my-app</span></div><div class="modal-kv"><span class="modal-kv-k">Wait after</span><span class="modal-kv-v">5 seconds</span></div>`},
-  'log-success':{icon:'✅',title:'Success Log Entry',sub:'[SUCCESS] — System restored',body:`<p>The self-healing cycle completed successfully. The app is responding normally again. Failure counter reset to 0 and monitoring continues.</p><div class="modal-kv"><span class="modal-kv-k">Result</span><span class="modal-kv-v">App healthy again</span></div><div class="modal-kv"><span class="modal-kv-k">Failure count</span><span class="modal-kv-v">Reset to 0</span></div><div class="modal-kv"><span class="modal-kv-k">Recovery time</span><span class="modal-kv-v">~18 seconds total</span></div>`},
+  docker:{icon:'🐳',title:'Docker',sub:'Containerization — Week 2',body:`<p>Docker packages the Flask application and all its dependencies into a <strong>lightweight container image</strong>. This ensures the app runs identically on any machine.</p><div class="modal-divider"></div><div class="modal-kv"><span class="modal-kv-k">Base image</span><span class="modal-kv-v">python:3.11-slim</span></div><div class="modal-kv"><span class="modal-kv-k">Exposed port</span><span class="modal-kv-v">5000</span></div><div class="modal-kv"><span class="modal-kv-k">Build command</span><span class="modal-kv-v">docker build -t healing-app .</span></div><div class="modal-kv"><span class="modal-kv-k">Run command</span><span class="modal-kv-v">docker run -d -p 5000:5000</span></div><div class="modal-tag-row"><span class="modal-tag b">Dockerfile</span><span class="modal-tag b">requirements.txt</span><span class="modal-tag b">app.py</span></div>`},
+  kubernetes:{icon:'☸️',title:'Kubernetes',sub:'Container Orchestration — Week 3',body:`<p>Kubernetes is the <strong>orchestration layer</strong> that manages all Docker containers. It runs 3 replicas of the app, load balances traffic, and automatically replaces crashed pods.</p><div class="modal-divider"></div><div class="modal-kv"><span class="modal-kv-k">Replicas</span><span class="modal-kv-v">3 pods</span></div><div class="modal-kv"><span class="modal-kv-k">Health check</span><span class="modal-kv-v">GET /health every 10s</span></div><div class="modal-kv"><span class="modal-kv-k">Config</span><span class="modal-kv-v">deployment.yaml + service.yaml</span></div>`},
+  prometheus:{icon:'📡',title:'Prometheus',sub:'Metrics Monitoring — Week 4',body:`<p>Prometheus scrapes performance metrics from the Flask app every 15 seconds and stores them in a time-series database.</p><div class="modal-divider"></div><div class="modal-kv"><span class="modal-kv-k">Scrape interval</span><span class="modal-kv-v">Every 15 seconds</span></div><div class="modal-kv"><span class="modal-kv-k">Metrics endpoint</span><span class="modal-kv-v">localhost:5000/metrics</span></div><div class="modal-kv"><span class="modal-kv-k">Dashboard</span><span class="modal-kv-v">localhost:9090</span></div>`},
+  grafana:{icon:'📊',title:'Grafana',sub:'Visualization Dashboard — Week 5',body:`<p>Grafana connects to Prometheus and displays all metrics as <strong>real-time charts</strong>.</p><div class="modal-divider"></div><div class="modal-kv"><span class="modal-kv-k">Dashboard name</span><span class="modal-kv-v">Self-Healing Cloud Dashboard</span></div><div class="modal-kv"><span class="modal-kv-k">Data source</span><span class="modal-kv-v">Prometheus</span></div><div class="modal-kv"><span class="modal-kv-k">Access URL</span><span class="modal-kv-v">localhost:3000</span></div><div class="modal-kv"><span class="modal-kv-k">Login</span><span class="modal-kv-v">admin / admin123</span></div>`},
+  python:{icon:'🐍',title:'Python',sub:'Automation Scripts — Week 6',body:`<p>Python powers the <strong>healing_script.py</strong> — the brain of the self-healing system. Runs in an infinite loop checking health every 10 seconds.</p><div class="modal-divider"></div><div class="modal-kv"><span class="modal-kv-k">Check interval</span><span class="modal-kv-v">Every 10 seconds</span></div><div class="modal-kv"><span class="modal-kv-k">Failure threshold</span><span class="modal-kv-v">2 consecutive failures</span></div><div class="modal-kv"><span class="modal-kv-k">Recovery action</span><span class="modal-kv-v">docker restart my-app</span></div>`},
+  aws:{icon:'☁️',title:'AWS Free Tier',sub:'Cloud Infrastructure — Week 1',body:`<p>Amazon Web Services provides the <strong>cloud infrastructure</strong> for hosting the application in production.</p><div class="modal-divider"></div><div class="modal-kv"><span class="modal-kv-k">Account type</span><span class="modal-kv-v">Free Tier</span></div><div class="modal-kv"><span class="modal-kv-k">Services used</span><span class="modal-kv-v">EC2, S3, Load Balancer</span></div><div class="modal-kv"><span class="modal-kv-k">Region</span><span class="modal-kv-v">ap-south-1 (Mumbai)</span></div>`},
+  flask:{icon:'🌐',title:'Flask',sub:'Web Application — Week 2',body:`<p>Flask is a lightweight Python web framework with 3 routes: home, /health for K8s probes, and /metrics for Prometheus.</p><div class="modal-divider"></div><div class="modal-kv"><span class="modal-kv-k">Route /</span><span class="modal-kv-v">Home page</span></div><div class="modal-kv"><span class="modal-kv-k">Route /health</span><span class="modal-kv-v">Returns {"status":"healthy"}</span></div><div class="modal-kv"><span class="modal-kv-k">Route /metrics</span><span class="modal-kv-v">Prometheus metrics data</span></div><div class="modal-kv"><span class="modal-kv-k">Port</span><span class="modal-kv-v">5000</span></div>`},
+  compose:{icon:'🔧',title:'Docker Compose',sub:'Service Integration — Week 7',body:`<p>Docker Compose starts all services with a single command, creating a shared network so all containers communicate by name.</p><div class="modal-divider"></div><div class="modal-kv"><span class="modal-kv-k">Command</span><span class="modal-kv-v">docker-compose up -d</span></div><div class="modal-kv"><span class="modal-kv-k">Services</span><span class="modal-kv-v">healing-app, prometheus, grafana</span></div><div class="modal-kv"><span class="modal-kv-k">Network</span><span class="modal-kv-v">monitoring (bridge)</span></div>`},
+  step1:{icon:'🚀',title:'Step 1: App Deployment',sub:'docker-compose up -d',body:`<p>The Flask app is packaged in Docker and started alongside Prometheus and Grafana with a single command.</p><div class="modal-divider"></div><div class="modal-kv"><span class="modal-kv-k">Files involved</span><span class="modal-kv-v">Dockerfile, docker-compose.yml</span></div><div class="modal-kv"><span class="modal-kv-k">K8s file</span><span class="modal-kv-v">deployment.yaml + service.yaml</span></div><div class="modal-kv"><span class="modal-kv-k">Result</span><span class="modal-kv-v">App running at localhost:5000</span></div>`},
+  step2:{icon:'📡',title:'Step 2: Metrics Collection',sub:'prometheus.yml — every 15 seconds',body:`<p>Prometheus scrapes <strong>/metrics endpoint</strong> of the Flask app for request count and response latency.</p><div class="modal-divider"></div><div class="modal-kv"><span class="modal-kv-k">Scrape endpoint</span><span class="modal-kv-v">localhost:5000/metrics</span></div><div class="modal-kv"><span class="modal-kv-k">Interval</span><span class="modal-kv-v">Every 15 seconds</span></div>`},
+  step3:{icon:'📊',title:'Step 3: Visualization',sub:'Grafana Dashboard — localhost:3000',body:`<p>Grafana displays Prometheus data as <strong>interactive charts</strong> for request rates, latency, CPU and memory.</p><div class="modal-divider"></div><div class="modal-kv"><span class="modal-kv-k">Dashboard URL</span><span class="modal-kv-v">localhost:3000</span></div><div class="modal-kv"><span class="modal-kv-k">Data source</span><span class="modal-kv-v">Prometheus</span></div>`},
+  step4:{icon:'🔍',title:'Step 4: Failure Detection',sub:'healing_script.py — checks every 10s',body:`<p>Python script runs in a loop calling GET /health every 10 seconds. Two consecutive failures = CRITICAL alert.</p><div class="modal-divider"></div><div class="modal-kv"><span class="modal-kv-k">Check URL</span><span class="modal-kv-v">localhost:5000/health</span></div><div class="modal-kv"><span class="modal-kv-k">Trigger threshold</span><span class="modal-kv-v">2 consecutive failures</span></div>`},
+  step5:{icon:'🔄',title:'Step 5: Auto Recovery',sub:'docker restart my-app',body:`<p>When 2 failures are detected, <strong>subprocess.run(["docker","restart","my-app"])</strong> is called automatically.</p><div class="modal-divider"></div><div class="modal-kv"><span class="modal-kv-k">Recovery command</span><span class="modal-kv-v">docker restart my-app</span></div><div class="modal-kv"><span class="modal-kv-k">Wait after restart</span><span class="modal-kv-v">5 seconds</span></div><div class="modal-kv"><span class="modal-kv-k">Logged to</span><span class="modal-kv-v">automation/alerts.log</span></div>`},
+  step6:{icon:'☸️',title:'Step 6: K8s Self-Healing',sub:'kubectl get pods — instant replacement',body:`<p>Kubernetes livenessProbe calls /health every 10s. Failed pods are replaced automatically within seconds.</p><div class="modal-divider"></div><div class="modal-kv"><span class="modal-kv-k">Probe path</span><span class="modal-kv-v">GET /health</span></div><div class="modal-kv"><span class="modal-kv-k">Replacement time</span><span class="modal-kv-v">Under 5 seconds</span></div><div class="modal-kv"><span class="modal-kv-k">Demo command</span><span class="modal-kv-v">kubectl delete pod &lt;name&gt;</span></div>`},
+  'ach-selfheal':{icon:'🔄',title:'Self-Healing in &lt;30 Seconds',sub:'Core project achievement',body:`<p>Complete self-healing cycle — crash to confirmed recovery — in under 30 seconds with <strong>zero human involvement</strong>.</p><div class="modal-divider"></div><div class="modal-kv"><span class="modal-kv-k">1. Detect failure</span><span class="modal-kv-v">10–20 seconds</span></div><div class="modal-kv"><span class="modal-kv-k">2. Restart container</span><span class="modal-kv-v">Under 5 seconds</span></div><div class="modal-kv"><span class="modal-kv-k">3. Confirm recovery</span><span class="modal-kv-v">10 seconds</span></div><div class="modal-kv"><span class="modal-kv-k">Total</span><span class="modal-kv-v">&lt; 30 seconds</span></div>`},
+  'ach-k8s':{icon:'☸️',title:'3-Pod Kubernetes Cluster',sub:'Infrastructure-level self-healing',body:`<p>Kubernetes maintains exactly <strong>3 running replicas</strong> at all times. Delete any pod — new one appears instantly.</p><div class="modal-divider"></div><div class="modal-kv"><span class="modal-kv-k">Demo command</span><span class="modal-kv-v">kubectl delete pod &lt;name&gt;</span></div><div class="modal-kv"><span class="modal-kv-k">Replacement time</span><span class="modal-kv-v">Under 5 seconds</span></div>`},
+  'ach-monitor':{icon:'📡',title:'Real-Time Monitoring',sub:'Prometheus metrics every 15s',body:`<p>Prometheus collects 4 key metrics every 15 seconds from the running application.</p><div class="modal-tag-row"><span class="modal-tag r">app_request_count_total</span><span class="modal-tag r">app_request_latency_seconds</span><span class="modal-tag b">cpu_usage</span><span class="modal-tag g">memory_consumption</span></div>`},
+  'ach-alerts':{icon:'🚨',title:'Automated Alerting System',sub:'alerts.log with full timestamps',body:`<p>Every event is logged to <strong>alerts.log</strong> with a precise timestamp — complete audit trail.</p><div class="modal-divider"></div><div class="modal-kv"><span class="modal-kv-k">Log file</span><span class="modal-kv-v">automation/alerts.log</span></div><div class="modal-kv"><span class="modal-kv-k">View command</span><span class="modal-kv-v">type automation\\alerts.log</span></div>`},
+  'ach-dashboard':{icon:'📊',title:'Grafana Dashboard',sub:'Real-time visual monitoring',body:`<p>The <strong>Self-Healing Cloud Dashboard</strong> shows live charts for request rate, latency, and system health.</p><div class="modal-divider"></div><div class="modal-kv"><span class="modal-kv-k">URL</span><span class="modal-kv-v">http://localhost:3000</span></div><div class="modal-kv"><span class="modal-kv-k">Login</span><span class="modal-kv-v">admin / admin123</span></div>`},
+  'ach-integration':{icon:'🔧',title:'One-Command Deployment',sub:'docker-compose up -d',body:`<p>docker-compose.yml integrates all 3 services sharing a <strong>monitoring network</strong>.</p><div class="modal-divider"></div><div class="modal-kv"><span class="modal-kv-k">Start all</span><span class="modal-kv-v">docker-compose up -d</span></div><div class="modal-kv"><span class="modal-kv-k">Services</span><span class="modal-kv-v">my-app · prometheus · grafana</span></div>`},
+  'm-pods':{icon:'☸️',title:'Pods Running Metric',sub:'Kubernetes replica status',body:`<p>Shows ratio of <strong>currently running pods</strong> to desired replicas. Should always show 3/3.</p><div class="modal-kv"><span class="modal-kv-k">Desired</span><span class="modal-kv-v">3 replicas</span></div><div class="modal-kv"><span class="modal-kv-k">Check with</span><span class="modal-kv-v">kubectl get pods</span></div>`},
+  'm-req':{icon:'📊',title:'Total Requests Metric',sub:'app_request_count_total',body:`<p>Counts every HTTP request since startup using Prometheus <strong>Counter</strong> — only goes up.</p><div class="modal-kv"><span class="modal-kv-k">Metric name</span><span class="modal-kv-v">app_request_count_total</span></div><div class="modal-kv"><span class="modal-kv-k">Type</span><span class="modal-kv-v">Counter (always increasing)</span></div>`},
+  'm-rec':{icon:'⚡',title:'Average Recovery Time',sub:'Crash to healthy in under 30s',body:`<p>Measures time from <strong>first failure detected</strong> to <strong>confirmed recovery</strong>. System averages 18 seconds.</p><div class="modal-kv"><span class="modal-kv-k">Detection</span><span class="modal-kv-v">10–20 seconds</span></div><div class="modal-kv"><span class="modal-kv-k">Container restart</span><span class="modal-kv-v">Under 5 seconds</span></div>`},
+  'm-heal':{icon:'🔄',title:'Self-Heals Counter',sub:'Total automated recoveries',body:`<p>Counts how many times the system has <strong>automatically healed itself</strong> this session.</p><div class="modal-kv"><span class="modal-kv-k">Today</span><span class="modal-kv-v">2 successful heals</span></div><div class="modal-kv"><span class="modal-kv-k">Success rate</span><span class="modal-kv-v">100%</span></div>`},
+  pod1:{icon:'🟢',title:'Pod: bz8w5',sub:'healing-app-688885fcc9-bz8w5',body:`<p>Healthy and serving traffic with 0 restarts since deployment.</p><div class="modal-kv"><span class="modal-kv-k">Status</span><span class="modal-kv-v">Running</span></div><div class="modal-kv"><span class="modal-kv-k">Restarts</span><span class="modal-kv-v">0</span></div><div class="modal-kv"><span class="modal-kv-k">Port</span><span class="modal-kv-v">5000/TCP</span></div>`},
+  pod2:{icon:'🟢',title:'Pod: q2qbz',sub:'healing-app-688885fcc9-q2qbz',body:`<p>Healthy and serving traffic with 0 restarts.</p><div class="modal-kv"><span class="modal-kv-k">Status</span><span class="modal-kv-v">Running</span></div><div class="modal-kv"><span class="modal-kv-k">Restarts</span><span class="modal-kv-v">0</span></div><div class="modal-kv"><span class="modal-kv-k">Port</span><span class="modal-kv-v">5000/TCP</span></div>`},
+  pod3:{icon:'🟡',title:'Pod: dgx9n',sub:'healing-app-688885fcc9-dgx9n',body:`<p>Auto-created by Kubernetes to replace a deleted pod. 1 restart — proof the self-healing system worked!</p><div class="modal-kv"><span class="modal-kv-k">Status</span><span class="modal-kv-v">Running</span></div><div class="modal-kv"><span class="modal-kv-k">Restarts</span><span class="modal-kv-v">1 (self-healed)</span></div>`},
+  'k8s-info':{icon:'☸️',title:'Kubernetes Self-Healing',sub:'How the demo works',body:`<p>Click <strong>Simulate Crash</strong> to watch a pod fail. Click <strong>Self-Heal</strong> to trigger automatic recovery. In production this all happens automatically — no button needed!</p><div class="modal-divider"></div><div class="modal-kv"><span class="modal-kv-k">Detection by</span><span class="modal-kv-v">healing_script.py</span></div><div class="modal-kv"><span class="modal-kv-k">Recovery by</span><span class="modal-kv-v">docker restart my-app</span></div>`},
+  'res-cpu':{icon:'💻',title:'CPU Usage',sub:'Processor utilization',body:`<p>Current CPU utilization of the Docker container. Normal range: <strong>20–50%</strong>. Spikes above 80% may indicate issues.</p><div class="modal-kv"><span class="modal-kv-k">Current</span><span class="modal-kv-v">~34% (normal)</span></div><div class="modal-kv"><span class="modal-kv-k">Alert threshold</span><span class="modal-kv-v">80%</span></div>`},
+  'res-mem':{icon:'🧠',title:'Memory Usage',sub:'RAM consumption',body:`<p>Flask + prometheus_client typically uses <strong>40–60%</strong> of allocated container memory.</p><div class="modal-kv"><span class="modal-kv-k">Current</span><span class="modal-kv-v">~52% (normal)</span></div><div class="modal-kv"><span class="modal-kv-k">Alert threshold</span><span class="modal-kv-v">85%</span></div>`},
+  'res-net':{icon:'🌐',title:'Network I/O',sub:'Incoming and outgoing traffic',body:`<p>Rate of network data transfer to/from the application. Low values (under 30%) indicate normal operation.</p><div class="modal-kv"><span class="modal-kv-k">Current</span><span class="modal-kv-v">~18% (healthy)</span></div>`},
+  'res-disk':{icon:'💾',title:'Disk Usage',sub:'Storage consumption',body:`<p>Disk space consumed by the container and application logs. Should remain stable for a lightweight Flask app.</p><div class="modal-kv"><span class="modal-kv-k">Current</span><span class="modal-kv-v">~44% (normal)</span></div><div class="modal-kv"><span class="modal-kv-k">Alert threshold</span><span class="modal-kv-v">85%</span></div>`},
+  'act-success':{icon:'✅',title:'Self-Healing Successful',sub:'System restored automatically',body:`<p>Self-healing cycle completed. App was <strong>automatically restored</strong> after 2 consecutive failures. Recovery time: ~18 seconds.</p><div class="modal-kv"><span class="modal-kv-k">Action taken</span><span class="modal-kv-v">docker restart my-app</span></div><div class="modal-kv"><span class="modal-kv-k">Human needed?</span><span class="modal-kv-v">None</span></div>`},
+  'act-restart':{icon:'♻',title:'Container Restarted',sub:'Auto-recovery action',body:`<p>Python script executed <strong>docker restart my-app</strong> automatically. Container restarted within 5 seconds.</p><div class="modal-kv"><span class="modal-kv-k">Logged in</span><span class="modal-kv-v">alerts.log</span></div>`},
+  'act-critical':{icon:'🔴',title:'Critical Alert Triggered',sub:'2 failures detected',body:`<p>After <strong>2 consecutive failures</strong>, system escalated to CRITICAL and automatically triggered self-healing.</p><div class="modal-kv"><span class="modal-kv-k">Failure count</span><span class="modal-kv-v">2 (threshold reached)</span></div>`},
+  'act-warn':{icon:'⚠',title:'Warning Alert',sub:'Failure count incrementing',body:`<p>WARNING logged each time health check fails. After <strong>2 warnings</strong> the system escalates to CRITICAL.</p><div class="modal-kv"><span class="modal-kv-k">Critical at</span><span class="modal-kv-v">Count = 2</span></div>`},
+  'act-down':{icon:'🔴',title:'App Down Detected',sub:'Connection failed to /health',body:`<p>Python script received a <strong>ConnectionError</strong> when calling localhost:5000/health.</p><div class="modal-kv"><span class="modal-kv-k">Error type</span><span class="modal-kv-v">ConnectionError</span></div><div class="modal-kv"><span class="modal-kv-k">Timeout</span><span class="modal-kv-v">5 seconds</span></div>`},
+  'act-ok':{icon:'✅',title:'Health Check Passed',sub:'App is responding normally',body:`<p>GET /health returned HTTP 200 with {"status":"healthy"}.</p><div class="modal-kv"><span class="modal-kv-k">Response</span><span class="modal-kv-v">200 OK — {"status":"healthy"}</span></div><div class="modal-kv"><span class="modal-kv-k">Next check</span><span class="modal-kv-v">In 10 seconds</span></div>`},
+  'log-start':{icon:'🚀',title:'Monitor Started',sub:'[START] log entry',body:`<p>healing_script.py was started. Will check app health every 10 seconds indefinitely.</p><div class="modal-kv"><span class="modal-kv-k">Command</span><span class="modal-kv-v">python automation/healing_script.py</span></div>`},
+  'log-ok':{icon:'✅',title:'Healthy Check Log',sub:'[OK] log entry',body:`<p>App responded with HTTP 200 to /health. Failure counter reset to 0.</p><div class="modal-kv"><span class="modal-kv-k">Response</span><span class="modal-kv-v">HTTP 200 OK</span></div><div class="modal-kv"><span class="modal-kv-k">Failure count</span><span class="modal-kv-v">Reset to 0</span></div>`},
+  'log-down':{icon:'🔴',title:'App Down Log Entry',sub:'[DOWN] — ConnectionError',body:`<p>ConnectionError when checking /health. Failure counter incremented by 1.</p><div class="modal-kv"><span class="modal-kv-k">Failure count</span><span class="modal-kv-v">+1</span></div>`},
+  'log-warn':{icon:'⚠',title:'Warning Log Entry',sub:'[WARNING] — Count incrementing',body:`<p>WARNING logged. If count reaches 2, CRITICAL alert triggers auto-recovery.</p><div class="modal-kv"><span class="modal-kv-k">Critical triggers at</span><span class="modal-kv-v">Count = 2</span></div>`},
+  'log-critical':{icon:'🚨',title:'Critical Log Entry',sub:'[CRITICAL] — Self-healing triggered',body:`<p>2 consecutive failures reached threshold. CRITICAL alert logged. Auto-recovery initiated.</p><div class="modal-kv"><span class="modal-kv-k">Action</span><span class="modal-kv-v">docker restart my-app</span></div>`},
+  'log-restart':{icon:'♻',title:'Restart Log Entry',sub:'[RESTART] — Container restarting',body:`<p>subprocess.run(["docker","restart","my-app"]) called. Waits 5 seconds then checks health again.</p><div class="modal-kv"><span class="modal-kv-k">Wait after</span><span class="modal-kv-v">5 seconds</span></div>`},
+  'log-success':{icon:'✅',title:'Success Log Entry',sub:'[SUCCESS] — System restored',body:`<p>Self-healing cycle completed successfully. Failure counter reset to 0 and monitoring continues.</p><div class="modal-kv"><span class="modal-kv-k">Recovery time</span><span class="modal-kv-v">~18 seconds total</span></div>`},
 };
-
-function openModal(key) {
-  const d = MODALS[key]; if(!d) return;
-  document.getElementById('modal-content').innerHTML = `<div class="modal-icon">${d.icon}</div><div class="modal-title">${d.title}</div><div class="modal-subtitle">${d.sub}</div><div class="modal-body">${d.body}</div>`;
-  document.getElementById('modal-overlay').classList.add('open');
-  document.body.style.overflow='hidden';
-}
-function closeModal(e) {
-  if(e && e.target !== document.getElementById('modal-overlay')) return;
-  document.getElementById('modal-overlay').classList.remove('open');
-  document.body.style.overflow='';
-}
-document.addEventListener('keydown', e => { if(e.key==='Escape') closeModal(); });
 
 // SOUND
 let actx;
-function getCtx(){ if(!actx) actx=new(window.AudioContext||window.webkitAudioContext)(); return actx; }
-function beep(f,d,t='sine',v=0.22){ const c=getCtx(),o=c.createOscillator(),g=c.createGain(); o.connect(g);g.connect(c.destination); o.type=t;o.frequency.value=f; g.gain.setValueAtTime(v,c.currentTime);g.gain.exponentialRampToValueAtTime(0.001,c.currentTime+d); o.start();o.stop(c.currentTime+d); }
-function sndAlert(){ beep(440,.15,'sawtooth',.28);setTimeout(()=>beep(330,.15,'sawtooth',.28),180);setTimeout(()=>beep(220,.3,'sawtooth',.3),360); }
-function sndSuccess(){ beep(523,.12,'sine',.18);setTimeout(()=>beep(659,.12,'sine',.18),130);setTimeout(()=>beep(784,.25,'sine',.18),260); }
-function sndWarn(){ beep(660,.12,'triangle',.2);setTimeout(()=>beep(550,.2,'triangle',.2),150); }
+function getCtx(){if(!actx)actx=new(window.AudioContext||window.webkitAudioContext)();return actx;}
+function beep(f,d,t='sine',v=0.22){const c=getCtx(),o=c.createOscillator(),g=c.createGain();o.connect(g);g.connect(c.destination);o.type=t;o.frequency.value=f;g.gain.setValueAtTime(v,c.currentTime);g.gain.exponentialRampToValueAtTime(0.001,c.currentTime+d);o.start();o.stop(c.currentTime+d);}
+function sndAlert(){beep(440,.15,'sawtooth',.28);setTimeout(()=>beep(330,.15,'sawtooth',.28),180);setTimeout(()=>beep(220,.3,'sawtooth',.3),360);}
+function sndSuccess(){beep(523,.12,'sine',.18);setTimeout(()=>beep(659,.12,'sine',.18),130);setTimeout(()=>beep(784,.25,'sine',.18),260);}
+function sndWarn(){beep(660,.12,'triangle',.2);setTimeout(()=>beep(550,.2,'triangle',.2),150);}
 
 // TOAST
 function toast(type,title,msg,ms=4500){
   const icons={danger:'🚨',success:'✅',warning:'⚠️',info:'ℹ️'};
-  const c=document.getElementById('tc'); const t=document.createElement('div'); t.className='toast '+type;
+  const c=document.getElementById('tc');const t=document.createElement('div');t.className='toast '+type;
   t.innerHTML=`<div class="t-icon">${icons[type]}</div><div class="t-body"><div class="t-title">${title}</div><div class="t-msg">${msg}</div><div class="t-bar"></div></div><button class="t-close" onclick="rmToast(this.closest('.toast'))">✕</button>`;
   c.appendChild(t);
-  if(type==='danger') sndAlert(); else if(type==='success') sndSuccess(); else if(type==='warning') sndWarn();
+  if(type==='danger')sndAlert();else if(type==='success')sndSuccess();else if(type==='warning')sndWarn();
   setTimeout(()=>rmToast(t),ms);
 }
-function rmToast(t){ if(!t||!t.parentElement) return; t.classList.add('out'); setTimeout(()=>t.remove(),280); }
+function rmToast(t){if(!t||!t.parentElement)return;t.classList.add('out');setTimeout(()=>t.remove(),280);}
 
 // CLOCK
 setInterval(()=>document.getElementById('clock').textContent=new Date().toLocaleTimeString('en-US',{hour12:false}),1000);
@@ -576,35 +821,39 @@ document.getElementById('clock').textContent=new Date().toLocaleTimeString('en-U
 
 // CHART
 const bd=[42,67,55,80,30,20,75,88],bl=['-7m','-6m','-5m','-4m','-3m','-2m','-1m','now'];
-bd.forEach((v,i)=>{ const col=document.createElement('div');col.className='bar-col'; const b=document.createElement('div');b.className='bar'+(v>70?' hi':'');b.style.height=v+'px'; const l=document.createElement('div');l.className='bar-lbl';l.textContent=bl[i]; col.append(b,l);document.getElementById('chart').appendChild(col); col.onclick=()=>toast('info','Request Rate',`${v} requests at ${bl[i]}`,2500); });
+bd.forEach((v,i)=>{const col=document.createElement('div');col.className='bar-col';const b=document.createElement('div');b.className='bar'+(v>70?' hi':'');b.style.height=v+'px';const l=document.createElement('div');l.className='bar-lbl';l.textContent=bl[i];col.append(b,l);document.getElementById('chart').appendChild(col);col.onclick=()=>toast('info','Request Rate',`${v} requests at ${bl[i]}`,2500);});
 
 // LIVE METRICS
 let rc=1284;
 setInterval(()=>{
-  rc+=Math.floor(Math.random()*3)+1; document.getElementById('req-val').textContent=rc.toLocaleString();
+  rc+=Math.floor(Math.random()*3)+1;document.getElementById('req-val').textContent=rc.toLocaleString();
   const cv=28+Math.floor(Math.random()*20),mv=48+Math.floor(Math.random()*12),nv=14+Math.floor(Math.random()*10),dv=40+Math.floor(Math.random()*8);
-  document.getElementById('c-pct').textContent=cv+'%'; document.getElementById('c-bar').style.width=cv+'%';
-  document.getElementById('m-pct').textContent=mv+'%'; document.getElementById('m-bar').style.width=mv+'%';
-  document.getElementById('n-pct').textContent=nv+'%'; document.getElementById('n-bar').style.width=nv+'%';
-  document.getElementById('d-pct').textContent=dv+'%'; document.getElementById('d-bar').style.width=dv+'%';
+  document.getElementById('c-pct').textContent=cv+'%';document.getElementById('c-bar').style.width=cv+'%';
+  document.getElementById('m-pct').textContent=mv+'%';document.getElementById('m-bar').style.width=mv+'%';
+  document.getElementById('n-pct').textContent=nv+'%';document.getElementById('n-bar').style.width=nv+'%';
+  document.getElementById('d-pct').textContent=dv+'%';document.getElementById('d-bar').style.width=dv+'%';
+  // also update docker CPU/mem for running containers
+  containers.forEach(c=>{if(c.status==='running'){c.cpu=Math.max(5,Math.min(75,c.cpu+Math.floor(Math.random()*8)-4));c.mem=Math.max(20,Math.min(80,c.mem+Math.floor(Math.random()*4)-2));}});
 },3000);
 
 // HELPERS
-function nowT(){ return new Date().toLocaleTimeString('en-US',{hour12:false}); }
-function addAct(type,icon,msg){ const f=document.getElementById('act-feed');const d=document.createElement('div');d.className='act-item '+type;d.innerHTML=`<div class="act-icon">${icon}</div><div><div class="act-msg">${msg}</div><div class="act-time">${nowT()}</div></div>`;d.onclick=()=>toast(type==='critical'?'danger':type==='success'?'success':'warning','Activity Detail',msg,3000);f.insertBefore(d,f.firstChild); }
-function addLog(cls,msg){ const l=document.getElementById('log-box');const d=document.createElement('div');d.className='log-row';d.innerHTML=`<span class="lt">[${nowT()}]</span><span class="${cls}">${msg}</span>`;d.onclick=()=>toast(cls==='ler'?'danger':cls==='lok'?'success':'info','Log Entry',msg,3000);l.appendChild(d);l.scrollTop=l.scrollHeight; }
-function go(id){ document.querySelector(id)?.scrollIntoView({behavior:'smooth'}); }
+function nowT(){return new Date().toLocaleTimeString('en-US',{hour12:false});}
+function addAct(type,icon,msg){const f=document.getElementById('act-feed');const d=document.createElement('div');d.className='act-item '+type;d.innerHTML=`<div class="act-icon">${icon}</div><div><div class="act-msg">${msg}</div><div class="act-time">${nowT()}</div></div>`;d.onclick=()=>toast(type==='critical'?'danger':type==='success'?'success':'warning','Activity Detail',msg,3000);f.insertBefore(d,f.firstChild);}
+function addLog(cls,msg){const l=document.getElementById('log-box');const d=document.createElement('div');d.className='log-row';d.innerHTML=`<span class="lt">[${nowT()}]</span><span class="${cls}">${msg}</span>`;d.onclick=()=>toast(cls==='ler'?'danger':cls==='lok'?'success':'info','Log Entry',msg,3000);l.appendChild(d);l.scrollTop=l.scrollHeight;}
+function go(id){document.querySelector(id)?.scrollIntoView({behavior:'smooth'});}
 
 // CRASH + HEAL
 let hc=2,crashed=false;
 function simulateCrash(){
-  if(crashed) return; crashed=true;
-  const btn=document.getElementById('btn-crash'); btn.disabled=true; btn.textContent='⚡ Simulating...';
+  if(crashed)return;crashed=true;
+  const btn=document.getElementById('btn-crash');btn.disabled=true;btn.textContent='⚡ Simulating...';
+  // also stop my-app container in docker section
+  const c=containers.find(x=>x.name==='my-app');if(c){c.status='stopped';c.uptime='Stopped';c.cpu=0;c.mem=0;renderContainers();}
   document.getElementById('p1d').className='pod-dot fail';
-  document.getElementById('p1b').className='pod-badge fail'; document.getElementById('p1b').textContent='Failed';
-  document.getElementById('pods-val').textContent='2 / 3'; document.getElementById('pods-val').className='m-val r';
-  document.getElementById('pods-sub').textContent='1 pod failed'; document.getElementById('pods-sub').className='m-sub dn';
-  document.getElementById('pod-badge').textContent='1 Failed'; document.getElementById('pod-badge').className='badge r';
+  document.getElementById('p1b').className='pod-badge fail';document.getElementById('p1b').textContent='Failed';
+  document.getElementById('pods-val').textContent='2 / 3';document.getElementById('pods-val').className='m-val r';
+  document.getElementById('pods-sub').textContent='1 pod failed';document.getElementById('pods-sub').className='m-sub dn';
+  document.getElementById('pod-badge').textContent='1 Failed';document.getElementById('pod-badge').className='badge r';
   document.getElementById('sys-dot').className='s-dot red';
   document.getElementById('sys-lbl').textContent='System degraded';
   document.getElementById('sys-status').style.color='var(--red)';
@@ -622,35 +871,39 @@ function simulateCrash(){
   },2000);
 }
 function triggerHeal(){
-  const hbtn=document.getElementById('btn-heal'); hbtn.textContent='♻ Healing...'; hbtn.style.opacity='.7'; hbtn.disabled=true;
+  const hbtn=document.getElementById('btn-heal');hbtn.textContent='♻ Healing...';hbtn.style.opacity='.7';hbtn.disabled=true;
   addAct('info','🔄','[RESTART] Attempting to restart container...');
   addLog('lin','[RESTART] Attempting to restart container...');
   toast('info','Self-Heal Initiated','Restarting container my-app...',3000);
+  // show restarting in docker section
+  const c=containers.find(x=>x.name==='my-app');if(c){c.status='restarting';renderContainers();}
   setTimeout(()=>{
     document.getElementById('p1d').className='pod-dot ok';
-    document.getElementById('p1b').className='pod-badge ok'; document.getElementById('p1b').textContent='Running';
-    document.getElementById('pods-val').textContent='3 / 3'; document.getElementById('pods-val').className='m-val g';
-    document.getElementById('pods-sub').textContent='All healthy'; document.getElementById('pods-sub').className='m-sub up';
-    document.getElementById('pod-badge').textContent='3 Running'; document.getElementById('pod-badge').className='badge g';
+    document.getElementById('p1b').className='pod-badge ok';document.getElementById('p1b').textContent='Running';
+    document.getElementById('pods-val').textContent='3 / 3';document.getElementById('pods-val').className='m-val g';
+    document.getElementById('pods-sub').textContent='All healthy';document.getElementById('pods-sub').className='m-sub up';
+    document.getElementById('pod-badge').textContent='3 Running';document.getElementById('pod-badge').className='badge g';
     document.getElementById('sys-dot').className='s-dot';
     document.getElementById('sys-lbl').textContent='All systems operational';
     document.getElementById('sys-status').style.color='var(--green)';
-    hc++; document.getElementById('heal-val').textContent=hc;
+    if(c){c.status='running';c.uptime='0m';c.cpu=20;c.mem=35;renderContainers();}
+    hc++;document.getElementById('heal-val').textContent=hc;
     addLog('lok','[SUCCESS] Container restarted successfully!');
     addLog('lok','[SUCCESS] Self-healing successful!');
     addAct('success','✅','[SUCCESS] Self-healing successful! System restored.');
     toast('success','Self-Healing Successful!',`System restored in ~18s. Total heals: ${hc}.`,6000);
-    hbtn.classList.remove('show'); hbtn.textContent='♻ Self-Heal'; hbtn.style.opacity='1'; hbtn.disabled=false;
-    document.getElementById('btn-crash').disabled=false; crashed=false;
+    hbtn.classList.remove('show');hbtn.textContent='♻ Self-Heal';hbtn.style.opacity='1';hbtn.disabled=false;
+    document.getElementById('btn-crash').disabled=false;crashed=false;
   },2500);
 }
 
 // SCROLL REVEAL
 const io=new IntersectionObserver(e=>e.forEach(el=>{if(el.isIntersecting){el.target.style.opacity='1';el.target.style.transform='translateY(0)'}}),{threshold:0.08});
-document.querySelectorAll('.tech-card,.step-card,.showcase-card,.m-card,.db-card').forEach(el=>{el.style.opacity='0';el.style.transform='translateY(16px)';el.style.transition='opacity .4s ease, transform .4s ease';io.observe(el);});
+document.querySelectorAll('.tech-card,.step-card,.showcase-card,.m-card,.db-card,.container-card').forEach(el=>{el.style.opacity='0';el.style.transform='translateY(16px)';el.style.transition='opacity .4s ease, transform .4s ease';io.observe(el);});
 
-// Welcome
-setTimeout(()=>toast('info','Dashboard Live','Click anything to explore details. Try Simulate Crash!',5000),1200);
+// INIT
+renderContainers();
+setTimeout(()=>toast('info','Dashboard Live','Click anything to explore. Try Simulate Crash!',5000),1200);
 </script>
 </body>
 </html>
