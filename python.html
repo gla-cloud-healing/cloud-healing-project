@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Python — CloudHeal Tech Stack</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="tech-shared.css">
+<style>.tech-hero h1 em{color:#0a7c4a}.tech-badge{background:#e6f4ee;color:#0a7c4a;border:1px solid #a7d7c0}</style>
+</head>
+<body>
+<nav>
+  <a class="nav-back" href="index.html">← Back</a>
+  <a class="nav-logo" href="index.html">Cloud<span>Heal</span></a>
+  <span class="nav-crumb">Tech Stack / <strong>Python</strong></span>
+</nav>
+<div class="tech-hero">
+  <div class="tech-hero-left">
+    <div class="tech-badge">Week 6 — Automation</div>
+    <span class="tech-icon-big">🐍</span>
+    <h1>Python — <em>Self-Healing</em><br>Brain</h1>
+    <p class="tech-hero-desc">Python powers the healing_script.py — the core automation engine. It runs 24/7 in an infinite loop, checking app health every 10 seconds and automatically restarting Docker containers when failures are detected.</p>
+    <div class="tag-row">
+      <span class="tag g">healing_script.py</span>
+      <span class="tag g">requests</span>
+      <span class="tag b">subprocess</span>
+      <span class="tag a">datetime</span>
+    </div>
+  </div>
+  <div class="tech-hero-right">
+    <div class="kv-title">Quick Reference</div>
+    <div class="kv-row"><span class="kv-k">Script File</span><span class="kv-v">automation/healing_script.py</span></div>
+    <div class="kv-row"><span class="kv-k">Check Interval</span><span class="kv-v">10 seconds</span></div>
+    <div class="kv-row"><span class="kv-k">Failure Threshold</span><span class="kv-v">2 consecutive</span></div>
+    <div class="kv-row"><span class="kv-k">Recovery Action</span><span class="kv-v">docker restart my-app</span></div>
+    <div class="kv-row"><span class="kv-k">Log File</span><span class="kv-v">automation/alerts.log</span></div>
+    <div class="kv-row"><span class="kv-k">Libraries</span><span class="kv-v">requests, subprocess, datetime</span></div>
+  </div>
+</div>
+<div class="page-body">
+
+  <div class="section reveal">
+    <div class="sec-lbl">Overview</div>
+    <div class="sec-title">How the healing script works</div>
+    <div class="cards-grid">
+      <div class="info-card"><div class="ic-icon">🔄</div><div class="ic-title">Infinite Loop</div><div class="ic-desc">Runs forever until Ctrl+C. Checks /health every 10 seconds, 24/7, no human needed.</div></div>
+      <div class="info-card"><div class="ic-icon">📊</div><div class="ic-title">Failure Counter</div><div class="ic-desc">Tracks consecutive failures. Resets to 0 on success. Triggers heal at count=2.</div></div>
+      <div class="info-card"><div class="ic-icon">⚡</div><div class="ic-title">Auto Restart</div><div class="ic-desc">Uses subprocess to run docker restart command when threshold is reached.</div></div>
+      <div class="info-card"><div class="ic-icon">📝</div><div class="ic-title">Full Logging</div><div class="ic-desc">Every event (OK, DOWN, WARNING, CRITICAL, RESTART, SUCCESS) logged to alerts.log with timestamps.</div></div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section reveal">
+    <div class="sec-lbl">Architecture</div>
+    <div class="sec-title">Healing Script Decision Flow</div>
+    <div class="flow-wrap">
+      <div class="flow">
+        <div class="flow-step"><div class="flow-box green"><div class="flow-icon">▶️</div><div class="flow-label">Script Starts</div><div class="flow-sub">Infinite loop</div></div></div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step"><div class="flow-box accent"><div class="flow-icon">🔍</div><div class="flow-label">GET /health</div><div class="flow-sub">Every 10s</div></div></div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step"><div class="flow-box green"><div class="flow-icon">200 OK</div><div class="flow-label">Healthy</div><div class="flow-sub">count = 0</div></div></div>
+      </div>
+    </div>
+    <div class="flow-wrap" style="margin-top:14px">
+      <div class="flow">
+        <div class="flow-step"><div class="flow-box red"><div class="flow-icon">❌</div><div class="flow-label">ConnectionError</div><div class="flow-sub">count++</div></div></div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step"><div class="flow-box amber"><div class="flow-icon">⚠️</div><div class="flow-label">count &lt; 2</div><div class="flow-sub">WARNING log</div></div></div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step"><div class="flow-box red"><div class="flow-icon">🚨</div><div class="flow-label">count == 2</div><div class="flow-sub">CRITICAL log</div></div></div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step"><div class="flow-box purple"><div class="flow-icon">♻️</div><div class="flow-label">docker restart</div><div class="flow-sub">Auto-heal!</div></div></div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step"><div class="flow-box green"><div class="flow-icon">✅</div><div class="flow-label">SUCCESS</div><div class="flow-sub">count = 0</div></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section reveal">
+    <div class="sec-lbl">Code</div>
+    <div class="sec-title">automation/healing_script.py — Full Code</div>
+    <div class="code-wrap">
+      <div class="code-header">
+        <span class="code-filename"><span class="code-dot r"></span><span class="code-dot y"></span><span class="code-dot g"></span>automation/healing_script.py</span>
+        <button class="copy-btn" onclick="copyCode(this,'heal-code')">Copy</button>
+      </div>
+      <pre id="heal-code"><span class="kw">import</span> requests
+<span class="kw">import</span> subprocess
+<span class="kw">import</span> time
+<span class="kw">from</span> datetime <span class="kw">import</span> datetime
+
+APP_URL     = <span class="str">"http://localhost:5000/health"</span>
+CONTAINER   = <span class="str">"my-app"</span>
+THRESHOLD   = <span class="num">2</span>   <span class="cm"># failures before heal</span>
+CHECK_EVERY = <span class="num">10</span>  <span class="cm"># seconds</span>
+LOG_FILE    = <span class="str">"automation/alerts.log"</span>
+
+<span class="kw">def</span> <span class="fn">log</span>(level, msg):
+    ts = datetime.<span class="fn">now</span>().<span class="fn">strftime</span>(<span class="str">"%Y-%m-%d %H:%M:%S"</span>)
+    line = <span class="fn">f</span><span class="str">"[{ts}] [{level}] {msg}"</span>
+    <span class="fn">print</span>(line)
+    <span class="kw">with</span> <span class="fn">open</span>(LOG_FILE, <span class="str">"a"</span>) <span class="kw">as</span> f:
+        f.<span class="fn">write</span>(line + <span class="str">"\n"</span>)
+
+<span class="kw">def</span> <span class="fn">check_health</span>():
+    <span class="kw">try</span>:
+        r = requests.<span class="fn">get</span>(APP_URL, timeout=<span class="num">5</span>)
+        <span class="kw">return</span> r.status_code == <span class="num">200</span>
+    <span class="kw">except</span> requests.exceptions.ConnectionError:
+        <span class="kw">return</span> <span class="val">False</span>
+
+<span class="kw">def</span> <span class="fn">heal_container</span>():
+    <span class="fn">log</span>(<span class="str">"RESTART"</span>, <span class="str">"Attempting to restart container..."</span>)
+    subprocess.<span class="fn">run</span>([<span class="str">"docker"</span>, <span class="str">"restart"</span>, CONTAINER])
+    time.<span class="fn">sleep</span>(<span class="num">5</span>)
+    <span class="kw">if</span> <span class="fn">check_health</span>():
+        <span class="fn">log</span>(<span class="str">"SUCCESS"</span>, <span class="str">"Container restarted successfully!"</span>)
+        <span class="fn">log</span>(<span class="str">"SUCCESS"</span>, <span class="str">"Self-healing successful!"</span>)
+    <span class="kw">else</span>:
+        <span class="fn">log</span>(<span class="str">"ERROR"</span>, <span class="str">"Restart failed — manual intervention needed!"</span>)
+
+<span class="cm"># ── MAIN LOOP ──</span>
+<span class="fn">log</span>(<span class="str">"START"</span>, <span class="str">"Self-Healing Monitor Started!"</span>)
+failure_count = <span class="num">0</span>
+
+<span class="kw">while</span> <span class="val">True</span>:
+    <span class="kw">if</span> <span class="fn">check_health</span>():
+        ts = datetime.<span class="fn">now</span>().<span class="fn">strftime</span>(<span class="str">"%H:%M:%S"</span>)
+        <span class="fn">log</span>(<span class="str">"OK"</span>, <span class="fn">f</span><span class="str">"App healthy - {ts}"</span>)
+        failure_count = <span class="num">0</span>
+    <span class="kw">else</span>:
+        <span class="fn">log</span>(<span class="str">"DOWN"</span>, <span class="str">"App is DOWN - Connection failed!"</span>)
+        failure_count += <span class="num">1</span>
+        <span class="fn">log</span>(<span class="str">"WARNING"</span>, <span class="fn">f</span><span class="str">"Failure count: {failure_count}"</span>)
+
+        <span class="kw">if</span> failure_count >= THRESHOLD:
+            <span class="fn">log</span>(<span class="str">"CRITICAL"</span>,
+                <span class="fn">f</span><span class="str">"App failed {failure_count} times - Triggering self-healing!"</span>)
+            <span class="fn">heal_container</span>()
+            failure_count = <span class="num">0</span>
+
+    time.<span class="fn">sleep</span>(CHECK_EVERY)</pre>
+    </div>
+  </div>
+
+  <div class="section reveal">
+    <div class="sec-lbl">Commands</div>
+    <div class="sec-title">Running the script</div>
+    <div class="code-wrap">
+      <div class="code-header">
+        <span class="code-filename"><span class="code-dot r"></span><span class="code-dot y"></span><span class="code-dot g"></span>Terminal</span>
+        <button class="copy-btn" onclick="copyCode(this,'run-cmds')">Copy</button>
+      </div>
+      <pre id="run-cmds"><span class="cm"># Run directly</span>
+<span class="fn">python</span> automation/healing_script.py
+
+<span class="cm"># Run in background using screen (on EC2)</span>
+<span class="fn">screen</span> <span class="num">-S</span> healing
+<span class="fn">python</span> automation/healing_script.py
+<span class="cm"># Ctrl+A then D to detach (script keeps running)</span>
+
+<span class="cm"># Re-attach to screen session</span>
+<span class="fn">screen</span> <span class="num">-r</span> healing
+
+<span class="cm"># View logs</span>
+<span class="fn">cat</span> automation/alerts.log        <span class="cm"># Linux/Mac</span>
+<span class="fn">type</span> automation\alerts.log       <span class="cm"># Windows</span></pre>
+    </div>
+  </div>
+
+  <div class="page-nav">
+    <a class="page-nav-btn" href="grafana.html">← <span><span class="pnb-lbl">Previous</span><span class="pnb-name">Grafana 📊</span></span></a>
+    <a class="page-nav-btn" href="aws.html"><span><span class="pnb-lbl">Next Tech →</span><span class="pnb-name">AWS ☁️</span></span></a>
+  </div>
+</div>
+<script>
+function copyCode(btn,id){const el=document.getElementById(id);navigator.clipboard.writeText(el.innerText).then(()=>{btn.textContent='Copied!';btn.classList.add('copied');setTimeout(()=>{btn.textContent='Copy';btn.classList.remove('copied')},2000);});}
+const io=new IntersectionObserver(e=>e.forEach(el=>{if(el.isIntersecting)el.target.classList.add('visible')}),{threshold:0.07});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+</script>
+</body>
+</html>

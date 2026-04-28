@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kubernetes — CloudHeal Tech Stack</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="tech-shared.css">
+<style>
+.tech-hero h1 em{color:#0a7c4a}
+.tech-badge{background:#e6f4ee;color:#0a7c4a;border:1px solid #a7d7c0}
+</style>
+</head>
+<body>
+<nav>
+  <a class="nav-back" href="index.html">← Back</a>
+  <a class="nav-logo" href="index.html">Cloud<span>Heal</span></a>
+  <span class="nav-crumb">Tech Stack / <strong>Kubernetes</strong></span>
+</nav>
+
+<div class="tech-hero">
+  <div class="tech-hero-left">
+    <div class="tech-badge">Week 3 — Orchestration</div>
+    <span class="tech-icon-big">☸️</span>
+    <h1>Kubernetes — <em>Container</em><br>Orchestration</h1>
+    <p class="tech-hero-desc">Kubernetes automatically manages, scales and self-heals Docker containers. It ensures 3 replicas of our Flask app are always running — if any pod crashes, K8s replaces it in under 5 seconds.</p>
+    <div class="tag-row">
+      <span class="tag g">deployment.yaml</span>
+      <span class="tag g">service.yaml</span>
+      <span class="tag b">3 Replicas</span>
+      <span class="tag a">livenessProbe</span>
+    </div>
+  </div>
+  <div class="tech-hero-right">
+    <div class="kv-title">Quick Reference</div>
+    <div class="kv-row"><span class="kv-k">Replicas</span><span class="kv-v">3 pods</span></div>
+    <div class="kv-row"><span class="kv-k">Probe Path</span><span class="kv-v">GET /health</span></div>
+    <div class="kv-row"><span class="kv-k">Probe Interval</span><span class="kv-v">10 seconds</span></div>
+    <div class="kv-row"><span class="kv-k">Replace Time</span><span class="kv-v">&lt; 5 seconds</span></div>
+    <div class="kv-row"><span class="kv-k">Service Type</span><span class="kv-v">NodePort</span></div>
+    <div class="kv-row"><span class="kv-k">Image</span><span class="kv-v">healing-app:latest</span></div>
+    <div class="kv-row"><span class="kv-k">Platform</span><span class="kv-v">Docker Desktop / Minikube</span></div>
+  </div>
+</div>
+
+<div class="page-body">
+
+  <div class="section reveal">
+    <div class="sec-lbl">Overview</div>
+    <div class="sec-title">Why Kubernetes?</div>
+    <div class="sec-desc">Docker runs containers, but Kubernetes manages them at scale. It provides automatic self-healing, load balancing, and rolling updates.</div>
+    <div class="cards-grid">
+      <div class="info-card"><div class="ic-icon">🔄</div><div class="ic-title">Self-Healing</div><div class="ic-desc">K8s restarts failed containers, replaces dead pods, and reschedules when nodes go down — automatically.</div></div>
+      <div class="info-card"><div class="ic-icon">⚖️</div><div class="ic-title">Load Balancing</div><div class="ic-desc">Traffic is distributed across all 3 running pods. No single pod gets overloaded.</div></div>
+      <div class="info-card"><div class="ic-icon">📈</div><div class="ic-title">Scaling</div><div class="ic-desc">Change replicas from 3 to 10 with one command. K8s creates new pods instantly.</div></div>
+      <div class="info-card"><div class="ic-icon">❤️</div><div class="ic-title">Health Probes</div><div class="ic-desc">livenessProbe and readinessProbe check /health every 10s. Failed pods are restarted immediately.</div></div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section reveal">
+    <div class="sec-lbl">Architecture</div>
+    <div class="sec-title">K8s Self-Healing Flow</div>
+    <div class="flow-wrap">
+      <div class="flow">
+        <div class="flow-step">
+          <div class="flow-box accent"><div class="flow-icon">☸️</div><div class="flow-label">Deployment</div><div class="flow-sub">replicas: 3</div></div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">
+          <div class="flow-box green"><div class="flow-icon">🟢</div><div class="flow-label">Pod 1</div><div class="flow-sub">Running</div></div>
+        </div>
+        <div class="flow-arrow">+</div>
+        <div class="flow-step">
+          <div class="flow-box green"><div class="flow-icon">🟢</div><div class="flow-label">Pod 2</div><div class="flow-sub">Running</div></div>
+        </div>
+        <div class="flow-arrow">+</div>
+        <div class="flow-step">
+          <div class="flow-box green"><div class="flow-icon">🟢</div><div class="flow-label">Pod 3</div><div class="flow-sub">Running</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="flow-wrap" style="margin-top:14px">
+      <div class="flow">
+        <div class="flow-step">
+          <div class="flow-box red"><div class="flow-icon">💥</div><div class="flow-label">Pod Crashes</div><div class="flow-sub">Deleted/Failed</div></div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">
+          <div class="flow-box amber"><div class="flow-icon">🔍</div><div class="flow-label">K8s Detects</div><div class="flow-sub">livenessProbe fails</div></div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">
+          <div class="flow-box accent"><div class="flow-icon">🆕</div><div class="flow-label">New Pod</div><div class="flow-sub">Scheduled instantly</div></div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">
+          <div class="flow-box green"><div class="flow-icon">✅</div><div class="flow-label">3/3 Running</div><div class="flow-sub">&lt; 5 seconds</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section reveal">
+    <div class="sec-lbl">Code</div>
+    <div class="sec-title">deployment.yaml</div>
+    <div class="sec-desc">Tells Kubernetes to always keep 3 replicas of the Flask app running, with health probes.</div>
+    <div class="code-wrap">
+      <div class="code-header">
+        <span class="code-filename"><span class="code-dot r"></span><span class="code-dot y"></span><span class="code-dot g"></span>deployment.yaml</span>
+        <button class="copy-btn" onclick="copyCode(this,'deploy-code')">Copy</button>
+      </div>
+      <pre id="deploy-code"><span class="prop">apiVersion</span>: <span class="str">apps/v1</span>
+<span class="prop">kind</span>: <span class="str">Deployment</span>
+<span class="prop">metadata</span>:
+  <span class="prop">name</span>: <span class="str">healing-app</span>
+<span class="prop">spec</span>:
+  <span class="prop">replicas</span>: <span class="num">3</span>
+  <span class="prop">selector</span>:
+    <span class="prop">matchLabels</span>:
+      <span class="prop">app</span>: <span class="str">healing-app</span>
+  <span class="prop">template</span>:
+    <span class="prop">metadata</span>:
+      <span class="prop">labels</span>:
+        <span class="prop">app</span>: <span class="str">healing-app</span>
+    <span class="prop">spec</span>:
+      <span class="prop">containers</span>:
+      - <span class="prop">name</span>: <span class="str">healing-app</span>
+        <span class="prop">image</span>: <span class="str">healing-app:latest</span>
+        <span class="prop">ports</span>:
+        - <span class="prop">containerPort</span>: <span class="num">5000</span>
+        <span class="prop">livenessProbe</span>:
+          <span class="prop">httpGet</span>:
+            <span class="prop">path</span>: <span class="str">/health</span>
+            <span class="prop">port</span>: <span class="num">5000</span>
+          <span class="prop">initialDelaySeconds</span>: <span class="num">10</span>
+          <span class="prop">periodSeconds</span>: <span class="num">10</span>
+        <span class="prop">readinessProbe</span>:
+          <span class="prop">httpGet</span>:
+            <span class="prop">path</span>: <span class="str">/health</span>
+            <span class="prop">port</span>: <span class="num">5000</span>
+          <span class="prop">initialDelaySeconds</span>: <span class="num">5</span>
+          <span class="prop">periodSeconds</span>: <span class="num">5</span></pre>
+    </div>
+  </div>
+
+  <div class="section reveal">
+    <div class="sec-lbl">Code</div>
+    <div class="sec-title">service.yaml</div>
+    <div class="sec-desc">Exposes the deployment as a network service so it can be accessed from outside the cluster.</div>
+    <div class="code-wrap">
+      <div class="code-header">
+        <span class="code-filename"><span class="code-dot r"></span><span class="code-dot y"></span><span class="code-dot g"></span>service.yaml</span>
+        <button class="copy-btn" onclick="copyCode(this,'svc-code')">Copy</button>
+      </div>
+      <pre id="svc-code"><span class="prop">apiVersion</span>: <span class="str">v1</span>
+<span class="prop">kind</span>: <span class="str">Service</span>
+<span class="prop">metadata</span>:
+  <span class="prop">name</span>: <span class="str">healing-app-service</span>
+<span class="prop">spec</span>:
+  <span class="prop">selector</span>:
+    <span class="prop">app</span>: <span class="str">healing-app</span>
+  <span class="prop">ports</span>:
+  - <span class="prop">protocol</span>: <span class="str">TCP</span>
+    <span class="prop">port</span>: <span class="num">80</span>
+    <span class="prop">targetPort</span>: <span class="num">5000</span>
+  <span class="prop">type</span>: <span class="str">NodePort</span></pre>
+    </div>
+  </div>
+
+  <div class="section reveal">
+    <div class="sec-lbl">Commands</div>
+    <div class="sec-title">Essential kubectl Commands</div>
+    <div class="code-wrap">
+      <div class="code-header">
+        <span class="code-filename"><span class="code-dot r"></span><span class="code-dot y"></span><span class="code-dot g"></span>Terminal</span>
+        <button class="copy-btn" onclick="copyCode(this,'k8s-cmds')">Copy</button>
+      </div>
+      <pre id="k8s-cmds"><span class="cm"># Apply deployment and service</span>
+<span class="fn">kubectl apply</span> <span class="num">-f</span> deployment.yaml
+<span class="fn">kubectl apply</span> <span class="num">-f</span> service.yaml
+
+<span class="cm"># Check pod status</span>
+<span class="fn">kubectl get pods</span>
+
+<span class="cm"># Watch pods in real-time</span>
+<span class="fn">kubectl get pods</span> <span class="num">-w</span>
+
+<span class="cm"># Simulate crash — delete a pod (K8s recreates it!)</span>
+<span class="fn">kubectl delete pod</span> healing-app-688885fcc9-bz8w5
+
+<span class="cm"># View pod logs</span>
+<span class="fn">kubectl logs</span> healing-app-688885fcc9-bz8w5
+
+<span class="cm"># Describe pod (shows events + health probes)</span>
+<span class="fn">kubectl describe pod</span> healing-app-688885fcc9-bz8w5
+
+<span class="cm"># Scale replicas up/down</span>
+<span class="fn">kubectl scale deployment</span> healing-app <span class="num">--replicas=5</span></pre>
+    </div>
+  </div>
+
+  <div class="page-nav">
+    <a class="page-nav-btn" href="docker.html">← <span><span class="pnb-lbl">Previous</span><span class="pnb-name">Docker 🐳</span></span></a>
+    <a class="page-nav-btn" href="prometheus.html"><span><span class="pnb-lbl">Next Tech →</span><span class="pnb-name">Prometheus 📡</span></span></a>
+  </div>
+</div>
+
+<script>
+function copyCode(btn,id){const el=document.getElementById(id);navigator.clipboard.writeText(el.innerText).then(()=>{btn.textContent='Copied!';btn.classList.add('copied');setTimeout(()=>{btn.textContent='Copy';btn.classList.remove('copied')},2000);});}
+const io=new IntersectionObserver(e=>e.forEach(el=>{if(el.isIntersecting)el.target.classList.add('visible')}),{threshold:0.07});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+</script>
+</body>
+</html>

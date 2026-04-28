@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AWS — CloudHeal Tech Stack</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="tech-shared.css">
+<style>.tech-hero h1 em{color:#b45309}.tech-badge{background:#fef3c7;color:#b45309;border:1px solid #fcd34d}</style>
+</head>
+<body>
+<nav>
+  <a class="nav-back" href="index.html">← Back</a>
+  <a class="nav-logo" href="index.html">Cloud<span>Heal</span></a>
+  <span class="nav-crumb">Tech Stack / <strong>AWS</strong></span>
+</nav>
+<div class="tech-hero">
+  <div class="tech-hero-left">
+    <div class="tech-badge">Week 1 — Cloud Platform</div>
+    <span class="tech-icon-big">☁️</span>
+    <h1>AWS — <em>Cloud</em><br>Infrastructure</h1>
+    <p class="tech-hero-desc">Amazon Web Services provides the cloud infrastructure for hosting this project in production. Using the Free Tier EC2 instance in Mumbai region (ap-south-1) to deploy the full stack.</p>
+    <div class="tag-row">
+      <span class="tag a">EC2 t2.micro</span>
+      <span class="tag b">ap-south-1 Mumbai</span>
+      <span class="tag g">Ubuntu 22.04</span>
+      <span class="tag r">Free Tier</span>
+    </div>
+  </div>
+  <div class="tech-hero-right">
+    <div class="kv-title">Quick Reference</div>
+    <div class="kv-row"><span class="kv-k">Instance Type</span><span class="kv-v">t2.micro (Free Tier)</span></div>
+    <div class="kv-row"><span class="kv-k">Region</span><span class="kv-v">ap-south-1 (Mumbai)</span></div>
+    <div class="kv-row"><span class="kv-k">OS</span><span class="kv-v">Ubuntu 22.04 LTS</span></div>
+    <div class="kv-row"><span class="kv-k">vCPUs</span><span class="kv-v">1</span></div>
+    <div class="kv-row"><span class="kv-k">RAM</span><span class="kv-v">1 GB</span></div>
+    <div class="kv-row"><span class="kv-k">Storage</span><span class="kv-v">8 GB SSD</span></div>
+  </div>
+</div>
+<div class="page-body">
+  <div class="section reveal">
+    <div class="sec-lbl">Overview</div>
+    <div class="sec-title">AWS Services Used</div>
+    <div class="cards-grid">
+      <div class="info-card"><div class="ic-icon">🖥️</div><div class="ic-title">EC2</div><div class="ic-desc">Virtual machine that runs Docker, Kubernetes, Flask, Prometheus and Grafana. t2.micro is free for 12 months.</div></div>
+      <div class="info-card"><div class="ic-icon">🔒</div><div class="ic-title">Security Groups</div><div class="ic-desc">Firewall rules — open ports 22 (SSH), 5000 (Flask), 9090 (Prometheus), 3000 (Grafana), 80 (HTTP).</div></div>
+      <div class="info-card"><div class="ic-icon">🌐</div><div class="ic-title">Public IP</div><div class="ic-desc">EC2 assigns a public IPv4 address — use it to access Flask app and dashboards from browser.</div></div>
+      <div class="info-card"><div class="ic-icon">🔑</div><div class="ic-title">Key Pairs</div><div class="ic-desc">.pem file used for SSH access. chmod 400 to secure it before connecting from terminal.</div></div>
+    </div>
+  </div>
+  <div class="divider"></div>
+  <div class="section reveal">
+    <div class="sec-lbl">Architecture</div>
+    <div class="sec-title">Deployment Architecture on EC2</div>
+    <div class="flow-wrap">
+      <div class="flow">
+        <div class="flow-step"><div class="flow-box amber"><div class="flow-icon">☁️</div><div class="flow-label">AWS EC2</div><div class="flow-sub">t2.micro Ubuntu</div></div></div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step"><div class="flow-box accent"><div class="flow-icon">🐳</div><div class="flow-label">Docker</div><div class="flow-sub">Container runtime</div></div></div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step"><div class="flow-box green"><div class="flow-icon">🌐</div><div class="flow-label">Flask :5000</div><div class="flow-sub">Public access</div></div></div>
+      </div>
+    </div>
+    <div class="flow-wrap" style="margin-top:14px">
+      <div class="flow">
+        <div class="flow-step"><div class="flow-box"><div class="flow-icon">💻</div><div class="flow-label">Your Browser</div><div class="flow-sub">Anywhere</div></div></div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step"><div class="flow-box accent"><div class="flow-icon">🔒</div><div class="flow-label">Security Group</div><div class="flow-sub">Port 5000 open</div></div></div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step"><div class="flow-box amber"><div class="flow-icon">🌍</div><div class="flow-label">Public IP</div><div class="flow-sub">EC2 address</div></div></div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step"><div class="flow-box green"><div class="flow-icon">🌐</div><div class="flow-label">Flask App</div><div class="flow-sub">Live!</div></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="divider"></div>
+  <div class="section reveal">
+    <div class="sec-lbl">Code</div>
+    <div class="sec-title">EC2 Setup Commands</div>
+    <div class="code-wrap">
+      <div class="code-header">
+        <span class="code-filename"><span class="code-dot r"></span><span class="code-dot y"></span><span class="code-dot g"></span>Terminal — After SSH into EC2</span>
+        <button class="copy-btn" onclick="copyCode(this,'ec2-setup')">Copy</button>
+      </div>
+      <pre id="ec2-setup"><span class="cm"># Connect via SSH (GitBash on Windows)</span>
+<span class="fn">ssh</span> <span class="num">-i</span> <span class="str">"your-key.pem"</span> ubuntu@YOUR_PUBLIC_IP
+
+<span class="cm"># Update system</span>
+<span class="fn">sudo apt update</span> && sudo apt upgrade <span class="num">-y</span>
+
+<span class="cm"># Install Docker</span>
+<span class="fn">sudo apt install</span> <span class="num">-y</span> docker.io docker-compose
+<span class="fn">sudo systemctl start</span> docker
+<span class="fn">sudo systemctl enable</span> docker
+<span class="fn">sudo usermod</span> <span class="num">-aG</span> docker ubuntu
+
+<span class="cm"># Clone project</span>
+<span class="fn">git clone</span> https://github.com/gla-cloud-healing/cloud-healing-project.git
+<span class="fn">cd</span> cloud-healing-project
+
+<span class="cm"># Deploy full stack</span>
+<span class="fn">docker-compose up</span> <span class="num">-d</span>
+
+<span class="cm"># Access from browser:</span>
+<span class="cm"># Flask:      http://YOUR_PUBLIC_IP:5000</span>
+<span class="cm"># Prometheus: http://YOUR_PUBLIC_IP:9090</span>
+<span class="cm"># Grafana:    http://YOUR_PUBLIC_IP:3000</span></pre>
+    </div>
+  </div>
+  <div class="page-nav">
+    <a class="page-nav-btn" href="python.html">← <span><span class="pnb-lbl">Previous</span><span class="pnb-name">Python 🐍</span></span></a>
+    <a class="page-nav-btn" href="flask.html"><span><span class="pnb-lbl">Next Tech →</span><span class="pnb-name">Flask 🌐</span></span></a>
+  </div>
+</div>
+<script>
+function copyCode(btn,id){const el=document.getElementById(id);navigator.clipboard.writeText(el.innerText).then(()=>{btn.textContent='Copied!';btn.classList.add('copied');setTimeout(()=>{btn.textContent='Copy';btn.classList.remove('copied')},2000);});}
+const io=new IntersectionObserver(e=>e.forEach(el=>{if(el.isIntersecting)el.target.classList.add('visible')}),{threshold:0.07});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+</script>
+</body>
+</html>

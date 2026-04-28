@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Docker Compose — CloudHeal Tech Stack</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="tech-shared.css">
+<style>.tech-hero h1 em{color:#6d28d9}.tech-badge{background:#ede9fe;color:#6d28d9;border:1px solid #c4b5fd}</style>
+</head>
+<body>
+<nav>
+  <a class="nav-back" href="index.html">← Back</a>
+  <a class="nav-logo" href="index.html">Cloud<span>Heal</span></a>
+  <span class="nav-crumb">Tech Stack / <strong>Docker Compose</strong></span>
+</nav>
+<div class="tech-hero">
+  <div class="tech-hero-left">
+    <div class="tech-badge">Week 7 — Integration</div>
+    <span class="tech-icon-big">🔧</span>
+    <h1>Docker Compose — <em>Service</em><br>Integration</h1>
+    <p class="tech-hero-desc">Docker Compose is the glue that holds everything together. One command starts all 3 services (Flask app, Prometheus, Grafana) on a shared network — ready to communicate by service name.</p>
+    <div class="tag-row">
+      <span class="tag p">docker-compose.yml</span>
+      <span class="tag b">docker-compose up -d</span>
+      <span class="tag g">monitoring network</span>
+    </div>
+  </div>
+  <div class="tech-hero-right">
+    <div class="kv-title">Quick Reference</div>
+    <div class="kv-row"><span class="kv-k">Start All</span><span class="kv-v">docker-compose up -d</span></div>
+    <div class="kv-row"><span class="kv-k">Stop All</span><span class="kv-v">docker-compose down</span></div>
+    <div class="kv-row"><span class="kv-k">View Logs</span><span class="kv-v">docker-compose logs</span></div>
+    <div class="kv-row"><span class="kv-k">Services</span><span class="kv-v">my-app, prometheus, grafana</span></div>
+    <div class="kv-row"><span class="kv-k">Network</span><span class="kv-v">monitoring (bridge)</span></div>
+  </div>
+</div>
+<div class="page-body">
+  <div class="section reveal">
+    <div class="sec-lbl">Overview</div>
+    <div class="sec-title">Why Docker Compose?</div>
+    <div class="cards-grid">
+      <div class="info-card"><div class="ic-icon">⚡</div><div class="ic-title">One Command</div><div class="ic-desc">docker-compose up -d starts all 3 services at once. No need to run 3 separate docker run commands.</div></div>
+      <div class="info-card"><div class="ic-icon">🌐</div><div class="ic-title">Shared Network</div><div class="ic-desc">All containers join the "monitoring" network and talk to each other using service names instead of IPs.</div></div>
+      <div class="info-card"><div class="ic-icon">💾</div><div class="ic-title">Volume Mounts</div><div class="ic-desc">Config files (prometheus.yml) mounted into containers without rebuilding images.</div></div>
+      <div class="info-card"><div class="ic-icon">🔁</div><div class="ic-title">Restart Policy</div><div class="ic-desc">unless-stopped ensures containers auto-restart after EC2 reboot or system restart.</div></div>
+    </div>
+  </div>
+  <div class="divider"></div>
+  <div class="section reveal">
+    <div class="sec-lbl">Architecture</div>
+    <div class="sec-title">Service Communication via Compose Network</div>
+    <div class="flow-wrap">
+      <div class="flow">
+        <div class="flow-step"><div class="flow-box accent"><div class="flow-icon">🌐</div><div class="flow-label">my-app</div><div class="flow-sub">:5000</div></div></div>
+        <div class="flow-arrow">←</div>
+        <div class="flow-step"><div class="flow-box red"><div class="flow-icon">📡</div><div class="flow-label">prometheus</div><div class="flow-sub">scrapes my-app:5000</div></div></div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step"><div class="flow-box amber"><div class="flow-icon">📊</div><div class="flow-label">grafana</div><div class="flow-sub">queries prometheus:9090</div></div></div>
+      </div>
+    </div>
+    <p style="font-size:13px;color:var(--muted);margin-top:12px">All 3 services are on the same <code style="background:var(--off);padding:2px 6px;border-radius:4px;font-family:'DM Mono',monospace;font-size:12px">monitoring</code> bridge network — they use service names to talk to each other.</p>
+  </div>
+  <div class="divider"></div>
+  <div class="section reveal">
+    <div class="sec-lbl">Code</div>
+    <div class="sec-title">docker-compose.yml — Full File</div>
+    <div class="code-wrap">
+      <div class="code-header">
+        <span class="code-filename"><span class="code-dot r"></span><span class="code-dot y"></span><span class="code-dot g"></span>docker-compose.yml</span>
+        <button class="copy-btn" onclick="copyCode(this,'comp-code')">Copy</button>
+      </div>
+      <pre id="comp-code"><span class="prop">version</span>: <span class="str">'3.8'</span>
+
+<span class="prop">services</span>:
+
+  <span class="fn">my-app</span>:
+    <span class="prop">build</span>: <span class="str">./app</span>
+    <span class="prop">container_name</span>: <span class="str">my-app</span>
+    <span class="prop">ports</span>:
+      - <span class="str">"5000:5000"</span>
+    <span class="prop">restart</span>: <span class="str">unless-stopped</span>
+    <span class="prop">networks</span>:
+      - <span class="val">monitoring</span>
+
+  <span class="fn">prometheus</span>:
+    <span class="prop">image</span>: <span class="str">prom/prometheus:latest</span>
+    <span class="prop">container_name</span>: <span class="str">prometheus</span>
+    <span class="prop">ports</span>:
+      - <span class="str">"9090:9090"</span>
+    <span class="prop">volumes</span>:
+      - <span class="str">./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml</span>
+    <span class="prop">networks</span>:
+      - <span class="val">monitoring</span>
+
+  <span class="fn">grafana</span>:
+    <span class="prop">image</span>: <span class="str">grafana/grafana:latest</span>
+    <span class="prop">container_name</span>: <span class="str">grafana</span>
+    <span class="prop">ports</span>:
+      - <span class="str">"3000:3000"</span>
+    <span class="prop">environment</span>:
+      - <span class="val">GF_SECURITY_ADMIN_PASSWORD=admin123</span>
+    <span class="prop">volumes</span>:
+      - <span class="val">grafana-storage:/var/lib/grafana</span>
+    <span class="prop">networks</span>:
+      - <span class="val">monitoring</span>
+
+<span class="prop">volumes</span>:
+  <span class="fn">grafana-storage</span>:
+
+<span class="prop">networks</span>:
+  <span class="fn">monitoring</span>:
+    <span class="prop">driver</span>: <span class="str">bridge</span></pre>
+    </div>
+  </div>
+  <div class="section reveal">
+    <div class="sec-lbl">Commands</div>
+    <div class="sec-title">Essential Compose Commands</div>
+    <div class="code-wrap">
+      <div class="code-header">
+        <span class="code-filename"><span class="code-dot r"></span><span class="code-dot y"></span><span class="code-dot g"></span>Terminal</span>
+        <button class="copy-btn" onclick="copyCode(this,'comp-cmds')">Copy</button>
+      </div>
+      <pre id="comp-cmds"><span class="cm"># Start all services in background</span>
+<span class="fn">docker-compose up</span> <span class="num">-d</span>
+
+<span class="cm"># Stop and remove containers</span>
+<span class="fn">docker-compose down</span>
+
+<span class="cm"># View logs for all services</span>
+<span class="fn">docker-compose logs</span>
+
+<span class="cm"># View logs for specific service</span>
+<span class="fn">docker-compose logs</span> my-app
+
+<span class="cm"># Check service status</span>
+<span class="fn">docker-compose ps</span>
+
+<span class="cm"># Rebuild after code changes</span>
+<span class="fn">docker-compose up</span> <span class="num">-d --build</span></pre>
+    </div>
+  </div>
+  <div class="page-nav">
+    <a class="page-nav-btn" href="flask.html">← <span><span class="pnb-lbl">Previous</span><span class="pnb-name">Flask 🌐</span></span></a>
+    <a class="page-nav-btn" href="index.html"><span><span class="pnb-lbl">Back to</span><span class="pnb-name">Home 🏠</span></span></a>
+  </div>
+</div>
+<script>
+function copyCode(btn,id){const el=document.getElementById(id);navigator.clipboard.writeText(el.innerText).then(()=>{btn.textContent='Copied!';btn.classList.add('copied');setTimeout(()=>{btn.textContent='Copy';btn.classList.remove('copied')},2000);});}
+const io=new IntersectionObserver(e=>e.forEach(el=>{if(el.isIntersecting)el.target.classList.add('visible')}),{threshold:0.07});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+</script>
+</body>
+</html>

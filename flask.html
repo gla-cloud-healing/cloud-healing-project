@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Flask — CloudHeal Tech Stack</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="tech-shared.css">
+<style>.tech-hero h1 em{color:#1a56db}.tech-badge{background:#e8f0fe;color:#1a56db;border:1px solid #c7d9fb}</style>
+</head>
+<body>
+<nav>
+  <a class="nav-back" href="index.html">← Back</a>
+  <a class="nav-logo" href="index.html">Cloud<span>Heal</span></a>
+  <span class="nav-crumb">Tech Stack / <strong>Flask</strong></span>
+</nav>
+<div class="tech-hero">
+  <div class="tech-hero-left">
+    <div class="tech-badge">Week 2 — Web Application</div>
+    <span class="tech-icon-big">🌐</span>
+    <h1>Flask — <em>Web App</em><br>Framework</h1>
+    <p class="tech-hero-desc">Flask is a lightweight Python web framework that powers our self-healing application. It has 3 key routes — home page, /health for Kubernetes probes, and /metrics for Prometheus scraping.</p>
+    <div class="tag-row">
+      <span class="tag b">app.py</span>
+      <span class="tag b">GET /health</span>
+      <span class="tag r">GET /metrics</span>
+      <span class="tag a">Port 5000</span>
+    </div>
+  </div>
+  <div class="tech-hero-right">
+    <div class="kv-title">Quick Reference</div>
+    <div class="kv-row"><span class="kv-k">Route /</span><span class="kv-v">Home page</span></div>
+    <div class="kv-row"><span class="kv-k">Route /health</span><span class="kv-v">{"status":"healthy"}</span></div>
+    <div class="kv-row"><span class="kv-k">Route /metrics</span><span class="kv-v">Prometheus data</span></div>
+    <div class="kv-row"><span class="kv-k">Port</span><span class="kv-v">5000</span></div>
+    <div class="kv-row"><span class="kv-k">Dependencies</span><span class="kv-v">flask, prometheus_client</span></div>
+  </div>
+</div>
+<div class="page-body">
+  <div class="section reveal">
+    <div class="sec-lbl">Overview</div>
+    <div class="sec-title">Flask Routes in our project</div>
+    <div class="cards-grid">
+      <div class="info-card"><div class="ic-icon">🏠</div><div class="ic-title">GET /</div><div class="ic-desc">Home page. Returns a simple HTML response confirming the app is running.</div></div>
+      <div class="info-card"><div class="ic-icon">❤️</div><div class="ic-title">GET /health</div><div class="ic-desc">Used by Kubernetes livenessProbe and healing_script.py. Returns {"status":"healthy"} with HTTP 200.</div></div>
+      <div class="info-card"><div class="ic-icon">📊</div><div class="ic-title">GET /metrics</div><div class="ic-desc">Prometheus scrapes this every 15 seconds. Returns request count, latency histograms in Prometheus format.</div></div>
+      <div class="info-card"><div class="ic-icon">💥</div><div class="ic-title">GET /crash</div><div class="ic-desc">Demo endpoint — deliberately crashes the app to demonstrate self-healing. Used in live demos.</div></div>
+    </div>
+  </div>
+  <div class="divider"></div>
+  <div class="section reveal">
+    <div class="sec-lbl">Architecture</div>
+    <div class="sec-title">Flask in the System</div>
+    <div class="flow-wrap">
+      <div class="flow">
+        <div class="flow-step"><div class="flow-box"><div class="flow-icon">🌐</div><div class="flow-label">Browser</div><div class="flow-sub">GET /</div></div></div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step"><div class="flow-box accent"><div class="flow-icon">🌐</div><div class="flow-label">Flask App</div><div class="flow-sub">:5000</div></div></div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step"><div class="flow-box green"><div class="flow-icon">200</div><div class="flow-label">Response</div><div class="flow-sub">HTML page</div></div></div>
+      </div>
+    </div>
+    <div class="flow-wrap" style="margin-top:14px">
+      <div class="flow">
+        <div class="flow-step"><div class="flow-box red"><div class="flow-icon">📡</div><div class="flow-label">Prometheus</div><div class="flow-sub">Every 15s</div></div></div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step"><div class="flow-box accent"><div class="flow-icon">📊</div><div class="flow-label">GET /metrics</div><div class="flow-sub">Flask route</div></div></div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step"><div class="flow-box green"><div class="flow-icon">📤</div><div class="flow-label">Metrics Data</div><div class="flow-sub">Prometheus format</div></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="divider"></div>
+  <div class="section reveal">
+    <div class="sec-lbl">Code</div>
+    <div class="sec-title">app/app.py — Full Source</div>
+    <div class="code-wrap">
+      <div class="code-header">
+        <span class="code-filename"><span class="code-dot r"></span><span class="code-dot y"></span><span class="code-dot g"></span>app/app.py</span>
+        <button class="copy-btn" onclick="copyCode(this,'flask-code')">Copy</button>
+      </div>
+      <pre id="flask-code"><span class="kw">from</span> flask <span class="kw">import</span> Flask, jsonify
+<span class="kw">from</span> prometheus_client <span class="kw">import</span> Counter, Histogram, generate_latest
+<span class="kw">import</span> time, os
+
+app = <span class="fn">Flask</span>(__name__)
+
+<span class="cm"># Prometheus metrics</span>
+REQUEST_COUNT = <span class="fn">Counter</span>(
+    <span class="str">'app_request_count_total'</span>,
+    <span class="str">'Total HTTP Requests'</span>,
+    [<span class="str">'method'</span>, <span class="str">'endpoint'</span>, <span class="str">'status'</span>]
+)
+REQUEST_LATENCY = <span class="fn">Histogram</span>(
+    <span class="str">'app_request_latency_seconds'</span>,
+    <span class="str">'Request latency'</span>,
+    [<span class="str">'endpoint'</span>]
+)
+
+<span class="fn">@app.route</span>(<span class="str">'/'</span>)
+<span class="kw">def</span> <span class="fn">home</span>():
+    start = time.<span class="fn">time</span>()
+    REQUEST_COUNT.<span class="fn">labels</span>(<span class="str">'GET'</span>, <span class="str">'/'</span>, <span class="str">'200'</span>).<span class="fn">inc</span>()
+    REQUEST_LATENCY.<span class="fn">labels</span>(<span class="str">'/'</span>).<span class="fn">observe</span>(time.<span class="fn">time</span>() - start)
+    <span class="kw">return</span> <span class="str">"Self-Healing Cloud Infrastructure is Running!"</span>
+
+<span class="fn">@app.route</span>(<span class="str">'/health'</span>)
+<span class="kw">def</span> <span class="fn">health</span>():
+    <span class="cm"># K8s livenessProbe + healing_script.py check this</span>
+    <span class="kw">return</span> <span class="fn">jsonify</span>({<span class="str">"status"</span>: <span class="str">"healthy"</span>}), <span class="num">200</span>
+
+<span class="fn">@app.route</span>(<span class="str">'/metrics'</span>)
+<span class="kw">def</span> <span class="fn">metrics</span>():
+    <span class="cm"># Prometheus scrapes this endpoint every 15 seconds</span>
+    <span class="kw">return</span> <span class="fn">generate_latest</span>(), <span class="num">200</span>
+
+<span class="fn">@app.route</span>(<span class="str">'/crash'</span>)
+<span class="kw">def</span> <span class="fn">crash</span>():
+    <span class="cm"># Demo: trigger a crash to test self-healing</span>
+    os._<span class="fn">exit</span>(<span class="num">1</span>)
+
+<span class="kw">if</span> __name__ == <span class="str">'__main__'</span>:
+    app.<span class="fn">run</span>(host=<span class="str">'0.0.0.0'</span>, port=<span class="num">5000</span>)</pre>
+    </div>
+  </div>
+  <div class="page-nav">
+    <a class="page-nav-btn" href="aws.html">← <span><span class="pnb-lbl">Previous</span><span class="pnb-name">AWS ☁️</span></span></a>
+    <a class="page-nav-btn" href="compose.html"><span><span class="pnb-lbl">Next Tech →</span><span class="pnb-name">Compose 🔧</span></span></a>
+  </div>
+</div>
+<script>
+function copyCode(btn,id){const el=document.getElementById(id);navigator.clipboard.writeText(el.innerText).then(()=>{btn.textContent='Copied!';btn.classList.add('copied');setTimeout(()=>{btn.textContent='Copy';btn.classList.remove('copied')},2000);});}
+const io=new IntersectionObserver(e=>e.forEach(el=>{if(el.isIntersecting)el.target.classList.add('visible')}),{threshold:0.07});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+</script>
+</body>
+</html>

@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prometheus — CloudHeal Tech Stack</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="tech-shared.css">
+<style>
+.tech-hero h1 em{color:#c0392b}
+.tech-badge{background:#fdecea;color:#c0392b;border:1px solid #f5b7b1}
+</style>
+</head>
+<body>
+<nav>
+  <a class="nav-back" href="index.html">← Back</a>
+  <a class="nav-logo" href="index.html">Cloud<span>Heal</span></a>
+  <span class="nav-crumb">Tech Stack / <strong>Prometheus</strong></span>
+</nav>
+
+<div class="tech-hero">
+  <div class="tech-hero-left">
+    <div class="tech-badge">Week 4 — Monitoring</div>
+    <span class="tech-icon-big">📡</span>
+    <h1>Prometheus — <em>Metrics</em><br>Monitoring</h1>
+    <p class="tech-hero-desc">Prometheus is an open-source monitoring system that scrapes metrics from our Flask app every 15 seconds and stores them in a time-series database for analysis and alerting.</p>
+    <div class="tag-row">
+      <span class="tag r">prometheus.yml</span>
+      <span class="tag r">app_request_count_total</span>
+      <span class="tag b">localhost:9090</span>
+      <span class="tag a">15s scrape interval</span>
+    </div>
+  </div>
+  <div class="tech-hero-right">
+    <div class="kv-title">Quick Reference</div>
+    <div class="kv-row"><span class="kv-k">Dashboard URL</span><span class="kv-v">localhost:9090</span></div>
+    <div class="kv-row"><span class="kv-k">Scrape Interval</span><span class="kv-v">15 seconds</span></div>
+    <div class="kv-row"><span class="kv-k">Metrics Endpoint</span><span class="kv-v">localhost:5000/metrics</span></div>
+    <div class="kv-row"><span class="kv-k">Config File</span><span class="kv-v">monitoring/prometheus.yml</span></div>
+    <div class="kv-row"><span class="kv-k">Storage</span><span class="kv-v">Time-series DB (local)</span></div>
+    <div class="kv-row"><span class="kv-k">Query Language</span><span class="kv-v">PromQL</span></div>
+  </div>
+</div>
+
+<div class="page-body">
+
+  <div class="section reveal">
+    <div class="sec-lbl">Overview</div>
+    <div class="sec-title">What does Prometheus do?</div>
+    <div class="cards-grid">
+      <div class="info-card"><div class="ic-icon">🔄</div><div class="ic-title">Pull-based Scraping</div><div class="ic-desc">Prometheus pulls metrics from our /metrics endpoint every 15s instead of apps pushing data to it.</div></div>
+      <div class="info-card"><div class="ic-icon">📊</div><div class="ic-title">Time-Series DB</div><div class="ic-desc">All metrics stored with timestamps — allowing historical analysis and trend detection.</div></div>
+      <div class="info-card"><div class="ic-icon">🔍</div><div class="ic-title">PromQL</div><div class="ic-desc">Powerful query language to analyze metrics. rate(), sum(), avg() — used in Grafana dashboards.</div></div>
+      <div class="info-card"><div class="ic-icon">🔔</div><div class="ic-title">Alerting</div><div class="ic-desc">Define alert rules that fire when metrics cross thresholds — integrates with Alertmanager.</div></div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section reveal">
+    <div class="sec-lbl">Architecture</div>
+    <div class="sec-title">Metrics Collection Flow</div>
+    <div class="flow-wrap">
+      <div class="flow">
+        <div class="flow-step">
+          <div class="flow-box green"><div class="flow-icon">🌐</div><div class="flow-label">Flask App</div><div class="flow-sub">localhost:5000</div></div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">
+          <div class="flow-box accent"><div class="flow-icon">📤</div><div class="flow-label">/metrics</div><div class="flow-sub">prometheus_client</div></div>
+        </div>
+        <div class="flow-arrow">←</div>
+        <div class="flow-step">
+          <div class="flow-box red"><div class="flow-icon">📡</div><div class="flow-label">Prometheus</div><div class="flow-sub">scrapes every 15s</div></div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">
+          <div class="flow-box"><div class="flow-icon">🗄️</div><div class="flow-label">TSDB</div><div class="flow-sub">Time-series store</div></div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">
+          <div class="flow-box amber"><div class="flow-icon">📊</div><div class="flow-label">Grafana</div><div class="flow-sub">Visualizes data</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section reveal">
+    <div class="sec-lbl">Code</div>
+    <div class="sec-title">monitoring/prometheus.yml</div>
+    <div class="code-wrap">
+      <div class="code-header">
+        <span class="code-filename"><span class="code-dot r"></span><span class="code-dot y"></span><span class="code-dot g"></span>monitoring/prometheus.yml</span>
+        <button class="copy-btn" onclick="copyCode(this,'prom-cfg')">Copy</button>
+      </div>
+      <pre id="prom-cfg"><span class="prop">global</span>:
+  <span class="prop">scrape_interval</span>: <span class="num">15s</span>
+  <span class="prop">evaluation_interval</span>: <span class="num">15s</span>
+
+<span class="prop">scrape_configs</span>:
+  - <span class="prop">job_name</span>: <span class="str">'flask-app'</span>
+    <span class="prop">static_configs</span>:
+      - <span class="prop">targets</span>: [<span class="str">'my-app:5000'</span>]</pre>
+    </div>
+  </div>
+
+  <div class="section reveal">
+    <div class="sec-lbl">Code</div>
+    <div class="sec-title">Flask app — /metrics endpoint (app.py)</div>
+    <div class="sec-desc">This is how our Flask app exposes metrics for Prometheus to scrape.</div>
+    <div class="code-wrap">
+      <div class="code-header">
+        <span class="code-filename"><span class="code-dot r"></span><span class="code-dot y"></span><span class="code-dot g"></span>app/app.py — metrics setup</span>
+        <button class="copy-btn" onclick="copyCode(this,'flask-metrics')">Copy</button>
+      </div>
+      <pre id="flask-metrics"><span class="kw">from</span> flask <span class="kw">import</span> Flask
+<span class="kw">from</span> prometheus_client <span class="kw">import</span> Counter, Histogram, generate_latest
+
+app = Flask(__name__)
+
+<span class="cm"># Counter — total requests (only goes up)</span>
+REQUEST_COUNT = <span class="fn">Counter</span>(
+    <span class="str">'app_request_count_total'</span>,
+    <span class="str">'Total HTTP Requests'</span>,
+    [<span class="str">'method'</span>, <span class="str">'endpoint'</span>, <span class="str">'status'</span>]
+)
+
+<span class="cm"># Histogram — request duration in seconds</span>
+REQUEST_LATENCY = <span class="fn">Histogram</span>(
+    <span class="str">'app_request_latency_seconds'</span>,
+    <span class="str">'Request latency in seconds'</span>,
+    [<span class="str">'endpoint'</span>]
+)
+
+<span class="cm"># Prometheus scrapes this endpoint every 15s</span>
+<span class="fn">@app.route</span>(<span class="str">'/metrics'</span>)
+<span class="kw">def</span> <span class="fn">metrics</span>():
+    <span class="kw">return</span> <span class="fn">generate_latest</span>(), <span class="num">200</span></pre>
+    </div>
+  </div>
+
+  <div class="section reveal">
+    <div class="sec-lbl">PromQL Queries</div>
+    <div class="sec-title">Useful queries for our project</div>
+    <div class="code-wrap">
+      <div class="code-header">
+        <span class="code-filename"><span class="code-dot r"></span><span class="code-dot y"></span><span class="code-dot g"></span>PromQL — use at localhost:9090</span>
+        <button class="copy-btn" onclick="copyCode(this,'promql')">Copy</button>
+      </div>
+      <pre id="promql"><span class="cm"># Total requests since startup</span>
+<span class="fn">app_request_count_total</span>
+
+<span class="cm"># Request rate per minute (last 1 min)</span>
+<span class="fn">rate</span>(app_request_count_total[<span class="num">1m</span>])
+
+<span class="cm"># Average request latency</span>
+<span class="fn">rate</span>(app_request_latency_seconds_sum[<span class="num">1m</span>])
+  / <span class="fn">rate</span>(app_request_latency_seconds_count[<span class="num">1m</span>])
+
+<span class="cm"># 95th percentile latency</span>
+<span class="fn">histogram_quantile</span>(<span class="num">0.95</span>,
+  <span class="fn">rate</span>(app_request_latency_seconds_bucket[<span class="num">5m</span>]))</pre>
+    </div>
+  </div>
+
+  <div class="page-nav">
+    <a class="page-nav-btn" href="kubernetes.html">← <span><span class="pnb-lbl">Previous</span><span class="pnb-name">Kubernetes ☸️</span></span></a>
+    <a class="page-nav-btn" href="grafana.html"><span><span class="pnb-lbl">Next Tech →</span><span class="pnb-name">Grafana 📊</span></span></a>
+  </div>
+</div>
+
+<script>
+function copyCode(btn,id){const el=document.getElementById(id);navigator.clipboard.writeText(el.innerText).then(()=>{btn.textContent='Copied!';btn.classList.add('copied');setTimeout(()=>{btn.textContent='Copy';btn.classList.remove('copied')},2000);});}
+const io=new IntersectionObserver(e=>e.forEach(el=>{if(el.isIntersecting)el.target.classList.add('visible')}),{threshold:0.07});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+</script>
+</body>
+</html>

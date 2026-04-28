@@ -800,3 +800,84 @@
 [2026-03-27 13:36:31] [RESTART] Attempting to restart container...
 [2026-03-27 13:36:31] [SUCCESS] Container restarted successfully!
 [2026-03-27 13:36:36] [SUCCESS] Self-healing successful!
+[2026-04-21 15:46:54] [START] Self-Healing Monitor Started!
+[2026-04-21 15:46:58] [DOWN] App is DOWN - Connection failed!
+[2026-04-21 15:46:58] [WARNING] Failure count: 1
+[2026-04-21 15:47:12] [DOWN] App is DOWN - Connection failed!
+[2026-04-21 15:47:12] [WARNING] Failure count: 2
+[2026-04-21 15:47:12] [CRITICAL] App failed 2 times - Triggering self-healing!
+[2026-04-21 15:47:12] [RESTART] Attempting to restart container...
+[2026-04-21 15:47:13] [SUCCESS] Container restarted successfully!
+[2026-04-21 15:47:18] [SUCCESS] Self-healing successful!
+[2026-04-21 15:47:31] [DOWN] App is DOWN - Connection failed!
+[2026-04-21 15:47:31] [WARNING] Failure count: 1
+[2026-04-21 15:47:45] [DOWN] App is DOWN - Connection failed!
+[2026-04-21 15:47:45] [WARNING] Failure count: 2
+[2026-04-21 15:47:45] [CRITICAL] App failed 2 times - Triggering self-healing!
+[2026-04-21 15:47:45] [RESTART] Attempting to restart container...
+[2026-04-21 15:47:46] [SUCCESS] Container restarted successfully!
+[2026-04-21 15:47:51] [SUCCESS] Self-healing successful!
+[2026-04-21 15:48:05] [DOWN] App is DOWN - Connection failed!
+[2026-04-21 15:48:05] [WARNING] Failure count: 1
+[2026-04-21 15:48:19] [DOWN] App is DOWN - Connection failed!
+[2026-04-21 15:48:19] [WARNING] Failure count: 2
+[2026-04-21 15:48:19] [CRITICAL] App failed 2 times - Triggering self-healing!
+[2026-04-21 15:48:19] [RESTART] Attempting to restart container...
+[2026-04-21 15:48:20] [SUCCESS] Container restarted successfully!
+[2026-04-21 15:48:25] [SUCCESS] Self-healing successful!
+[2026-04-21 15:48:38] [DOWN] App is DOWN - Connection failed!
+[2026-04-21 15:48:38] [WARNING] Failure count: 1
+[2026-04-21 15:48:52] [DOWN] App is DOWN - Connection failed!
+[2026-04-21 15:48:52] [WARNING] Failure count: 2
+[2026-04-21 15:48:52] [CRITICAL] App failed 2 times - Triggering self-healing!
+[2026-04-21 15:48:52] [RESTART] Attempting to restart container...
+[2026-04-21 15:48:52] [SUCCESS] Container restarted successfully!
+[2026-04-21 15:48:57] [SUCCESS] Self-healing successful!
+[2026-04-21 15:49:11] [DOWN] App is DOWN - Connection failed!
+[2026-04-21 15:49:11] [WARNING] Failure count: 1
+[2026-04-21 15:49:25] [DOWN] App is DOWN - Connection failed!
+[2026-04-21 15:49:25] [WARNING] Failure count: 2
+[2026-04-21 15:49:25] [CRITICAL] App failed 2 times - Triggering self-healing!
+[2026-04-21 15:49:25] [RESTART] Attempting to restart container...
+[2026-04-21 15:49:26] [SUCCESS] Container restarted successfully!
+[2026-04-21 15:49:31] [SUCCESS] Self-healing successful!
+[2026-04-21 15:49:44] [DOWN] App is DOWN - Connection failed!
+[2026-04-21 15:49:44] [WARNING] Failure count: 1
+[2026-04-21 15:49:58] [DOWN] App is DOWN - Connection failed!
+[2026-04-21 15:49:58] [WARNING] Failure count: 2
+[2026-04-21 15:49:58] [CRITICAL] App failed 2 times - Triggering self-healing!
+[2026-04-21 15:49:58] [RESTART] Attempting to restart container...
+[2026-04-21 15:49:59] [SUCCESS] Container restarted successfully!
+[2026-04-21 15:50:04] [SUCCESS] Self-healing successful!
+[2026-04-21 15:50:17] [DOWN] App is DOWN - Connection failed!
+[2026-04-21 15:50:17] [WARNING] Failure count: 1
+[2026-04-21 15:50:31] [DOWN] App is DOWN - Connection failed!
+[2026-04-21 15:50:31] [WARNING] Failure count: 2
+[2026-04-21 15:50:31] [CRITICAL] App failed 2 times - Triggering self-healing!
+[2026-04-21 15:50:31] [RESTART] Attempting to restart container...
+[2026-04-21 15:50:32] [SUCCESS] Container restarted successfully!
+[2026-04-21 15:50:37] [SUCCESS] Self-healing successful!
+[2026-04-21 15:50:51] [DOWN] App is DOWN - Connection failed!
+[2026-04-21 15:50:51] [WARNING] Failure count: 1
+[2026-04-21 15:51:04] [DOWN] App is DOWN - Connection failed!
+[2026-04-21 15:51:04] [WARNING] Failure count: 2
+[2026-04-21 15:51:04] [CRITICAL] App failed 2 times - Triggering self-healing!
+[2026-04-21 15:51:04] [RESTART] Attempting to restart container...
+[2026-04-21 15:51:05] [SUCCESS] Container restarted successfully!
+[2026-04-21 15:51:10] [SUCCESS] Self-healing successful!
+[2026-04-21 15:51:24] [DOWN] App is DOWN - Connection failed!
+[2026-04-21 15:51:24] [WARNING] Failure count: 1
+[2026-04-21 15:51:37] [DOWN] App is DOWN - Connection failed!
+[2026-04-21 15:51:37] [WARNING] Failure count: 2
+[2026-04-21 15:51:37] [CRITICAL] App failed 2 times - Triggering self-healing!
+[2026-04-21 15:51:37] [RESTART] Attempting to restart container...
+[2026-04-21 15:51:38] [SUCCESS] Container restarted successfully!
+[2026-04-21 15:51:43] [SUCCESS] Self-healing successful!
+[2026-04-21 15:51:57] [DOWN] App is DOWN - Connection failed!
+[2026-04-21 15:51:57] [WARNING] Failure count: 1
+[2026-04-21 15:52:11] [DOWN] App is DOWN - Connection failed!
+[2026-04-21 15:52:11] [WARNING] Failure count: 2
+[2026-04-21 15:52:11] [CRITICAL] App failed 2 times - Triggering self-healing!
+[2026-04-21 15:52:11] [RESTART] Attempting to restart container...
+[2026-04-21 15:52:12] [SUCCESS] Container restarted successfully!
+[2026-04-21 15:52:17] [SUCCESS] Self-healing successful!

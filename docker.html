@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Docker — CloudHeal Tech Stack</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="tech-shared.css">
+<style>
+.tech-hero h1 em{color:#1a56db}
+.tech-badge{background:#e8f0fe;color:#1a56db;border:1px solid #c7d9fb}
+</style>
+</head>
+<body>
+<nav>
+  <a class="nav-back" href="index.html">← Back</a>
+  <a class="nav-logo" href="index.html">Cloud<span>Heal</span></a>
+  <span class="nav-crumb">Tech Stack / <strong>Docker</strong></span>
+</nav>
+
+<div class="tech-hero">
+  <div class="tech-hero-left">
+    <div class="tech-badge">Week 2 — Containerization</div>
+    <span class="tech-icon-big">🐳</span>
+    <h1>Docker — <em>Containerization</em><br>Engine</h1>
+    <p class="tech-hero-desc">Docker packages the Flask application and all its dependencies into a lightweight, portable container image. It ensures the app runs identically on any machine — dev, test, or production.</p>
+    <div class="tag-row">
+      <span class="tag b">Dockerfile</span>
+      <span class="tag b">docker-compose.yml</span>
+      <span class="tag g">python:3.11-slim</span>
+      <span class="tag a">Port 5000</span>
+    </div>
+  </div>
+  <div class="tech-hero-right">
+    <div class="kv-title">Quick Reference</div>
+    <div class="kv-row"><span class="kv-k">Base Image</span><span class="kv-v">python:3.11-slim</span></div>
+    <div class="kv-row"><span class="kv-k">Exposed Port</span><span class="kv-v">5000</span></div>
+    <div class="kv-row"><span class="kv-k">Build Command</span><span class="kv-v">docker build -t healing-app .</span></div>
+    <div class="kv-row"><span class="kv-k">Run Command</span><span class="kv-v">docker run -d -p 5000:5000</span></div>
+    <div class="kv-row"><span class="kv-k">Container Name</span><span class="kv-v">my-app</span></div>
+    <div class="kv-row"><span class="kv-k">Network</span><span class="kv-v">monitoring (bridge)</span></div>
+    <div class="kv-row"><span class="kv-k">Restart Policy</span><span class="kv-v">unless-stopped</span></div>
+  </div>
+</div>
+
+<div class="page-body">
+
+  <!-- WHAT IS DOCKER -->
+  <div class="section reveal">
+    <div class="sec-lbl">Overview</div>
+    <div class="sec-title">What is Docker?</div>
+    <div class="sec-desc">Docker is a platform that uses OS-level virtualization to deliver software in isolated packages called containers. Unlike VMs, containers share the host OS kernel — making them fast and lightweight.</div>
+    <div class="cards-grid">
+      <div class="info-card"><div class="ic-icon">📦</div><div class="ic-title">Isolation</div><div class="ic-desc">Each container has its own filesystem, processes, and network. No conflicts between apps running on the same machine.</div></div>
+      <div class="info-card"><div class="ic-icon">⚡</div><div class="ic-title">Lightweight</div><div class="ic-desc">Containers start in milliseconds and use far less RAM than VMs. Our healing-app container runs in ~200MB RAM.</div></div>
+      <div class="info-card"><div class="ic-icon">🔁</div><div class="ic-title">Reproducibility</div><div class="ic-desc">Same Dockerfile = same environment everywhere. No "works on my machine" problems across team members.</div></div>
+      <div class="info-card"><div class="ic-icon">🔧</div><div class="ic-title">Self-Healing</div><div class="ic-desc">Docker's restart policies and our healing_script.py restart containers automatically when they crash.</div></div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- FLOW DIAGRAM -->
+  <div class="section reveal">
+    <div class="sec-lbl">Architecture</div>
+    <div class="sec-title">How Docker fits in our system</div>
+    <div class="sec-desc">Docker is the base layer — everything else (K8s, Prometheus, Grafana) runs inside Docker containers.</div>
+    <div class="flow-wrap">
+      <div class="flow">
+        <div class="flow-step">
+          <div class="flow-box"><div class="flow-icon">📄</div><div class="flow-label">Dockerfile</div><div class="flow-sub">Build instructions</div></div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">
+          <div class="flow-box accent"><div class="flow-icon">🐳</div><div class="flow-label">Docker Build</div><div class="flow-sub">Creates image</div></div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">
+          <div class="flow-box"><div class="flow-icon">📦</div><div class="flow-label">Image</div><div class="flow-sub">healing-app:latest</div></div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">
+          <div class="flow-box green"><div class="flow-icon">🟢</div><div class="flow-label">Container</div><div class="flow-sub">my-app running</div></div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">
+          <div class="flow-box"><div class="flow-icon">🌐</div><div class="flow-label">Flask App</div><div class="flow-sub">localhost:5000</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="flow-wrap" style="margin-top:14px">
+      <div class="flow">
+        <div class="flow-step">
+          <div class="flow-box red"><div class="flow-icon">💥</div><div class="flow-label">Crash!</div><div class="flow-sub">Container stops</div></div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">
+          <div class="flow-box amber"><div class="flow-icon">🔍</div><div class="flow-label">Detected</div><div class="flow-sub">healing_script.py</div></div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">
+          <div class="flow-box accent"><div class="flow-icon">♻️</div><div class="flow-label">docker restart</div><div class="flow-sub">my-app</div></div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">
+          <div class="flow-box green"><div class="flow-icon">✅</div><div class="flow-label">Healed</div><div class="flow-sub">Back online</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- DOCKERFILE CODE -->
+  <div class="section reveal">
+    <div class="sec-lbl">Code</div>
+    <div class="sec-title">Dockerfile — app/Dockerfile</div>
+    <div class="sec-desc">Defines how to build the Flask app container step by step from a base Python image.</div>
+    <div class="code-wrap">
+      <div class="code-header">
+        <span class="code-filename"><span class="code-dot r"></span><span class="code-dot y"></span><span class="code-dot g"></span>app/Dockerfile</span>
+        <button class="copy-btn" onclick="copyCode(this,'dockerfile-code')">Copy</button>
+      </div>
+      <pre id="dockerfile-code"><span class="cm"># Base image — lightweight Python 3.11</span>
+<span class="kw">FROM</span> <span class="str">python:3.11-slim</span>
+
+<span class="cm"># Set working directory inside container</span>
+<span class="kw">WORKDIR</span> <span class="str">/app</span>
+
+<span class="cm"># Copy dependency list first (layer caching)</span>
+<span class="kw">COPY</span> <span class="val">requirements.txt</span> <span class="val">.</span>
+
+<span class="cm"># Install Python dependencies</span>
+<span class="kw">RUN</span> pip install <span class="num">--no-cache-dir</span> <span class="num">-r</span> requirements.txt
+
+<span class="cm"># Copy application source code</span>
+<span class="kw">COPY</span> <span class="val">.</span> <span class="val">.</span>
+
+<span class="cm"># Expose Flask port</span>
+<span class="kw">EXPOSE</span> <span class="num">5000</span>
+
+<span class="cm"># Start the Flask application</span>
+<span class="kw">CMD</span> [<span class="str">"python"</span>, <span class="str">"app.py"</span>]</pre>
+    </div>
+  </div>
+
+  <!-- DOCKER COMPOSE CODE -->
+  <div class="section reveal">
+    <div class="sec-lbl">Code</div>
+    <div class="sec-title">docker-compose.yml — Full Stack</div>
+    <div class="sec-desc">Starts all 3 services (Flask app, Prometheus, Grafana) with one command on a shared network.</div>
+    <div class="code-wrap">
+      <div class="code-header">
+        <span class="code-filename"><span class="code-dot r"></span><span class="code-dot y"></span><span class="code-dot g"></span>docker-compose.yml</span>
+        <button class="copy-btn" onclick="copyCode(this,'compose-code')">Copy</button>
+      </div>
+      <pre id="compose-code"><span class="prop">version</span>: <span class="str">'3.8'</span>
+
+<span class="prop">services</span>:
+  <span class="fn">my-app</span>:
+    <span class="prop">build</span>: <span class="str">./app</span>
+    <span class="prop">container_name</span>: <span class="str">my-app</span>
+    <span class="prop">ports</span>:
+      - <span class="str">"5000:5000"</span>
+    <span class="prop">restart</span>: <span class="str">unless-stopped</span>
+    <span class="prop">networks</span>:
+      - <span class="val">monitoring</span>
+
+  <span class="fn">prometheus</span>:
+    <span class="prop">image</span>: <span class="str">prom/prometheus:latest</span>
+    <span class="prop">container_name</span>: <span class="str">prometheus</span>
+    <span class="prop">ports</span>:
+      - <span class="str">"9090:9090"</span>
+    <span class="prop">volumes</span>:
+      - <span class="str">./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml</span>
+    <span class="prop">networks</span>:
+      - <span class="val">monitoring</span>
+
+  <span class="fn">grafana</span>:
+    <span class="prop">image</span>: <span class="str">grafana/grafana:latest</span>
+    <span class="prop">container_name</span>: <span class="str">grafana</span>
+    <span class="prop">ports</span>:
+      - <span class="str">"3000:3000"</span>
+    <span class="prop">networks</span>:
+      - <span class="val">monitoring</span>
+
+<span class="prop">networks</span>:
+  <span class="fn">monitoring</span>:
+    <span class="prop">driver</span>: <span class="str">bridge</span></pre>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- KEY COMMANDS -->
+  <div class="section reveal">
+    <div class="sec-lbl">Commands</div>
+    <div class="sec-title">Essential Docker Commands</div>
+    <div class="code-wrap">
+      <div class="code-header">
+        <span class="code-filename"><span class="code-dot r"></span><span class="code-dot y"></span><span class="code-dot g"></span>Terminal</span>
+        <button class="copy-btn" onclick="copyCode(this,'cmds-code')">Copy</button>
+      </div>
+      <pre id="cmds-code"><span class="cm"># Build image from Dockerfile</span>
+<span class="fn">docker build</span> <span class="num">-t</span> healing-app <span class="val">./app</span>
+
+<span class="cm"># Start all services (detached mode)</span>
+<span class="fn">docker-compose up</span> <span class="num">-d</span>
+
+<span class="cm"># Stop all services</span>
+<span class="fn">docker-compose down</span>
+
+<span class="cm"># View running containers</span>
+<span class="fn">docker ps</span>
+
+<span class="cm"># View container logs</span>
+<span class="fn">docker logs</span> my-app
+
+<span class="cm"># Manually restart the app container</span>
+<span class="fn">docker restart</span> my-app
+
+<span class="cm"># Execute shell inside container</span>
+<span class="fn">docker exec</span> <span class="num">-it</span> my-app bash
+
+<span class="cm"># Check container resource usage</span>
+<span class="fn">docker stats</span></pre>
+    </div>
+  </div>
+
+  <!-- PAGE NAV -->
+  <div class="page-nav">
+    <a class="page-nav-btn" href="index.html">← <span><span class="pnb-lbl">Back to</span><span class="pnb-name">Home</span></span></a>
+    <a class="page-nav-btn" href="kubernetes.html"><span><span class="pnb-lbl">Next Tech →</span><span class="pnb-name">Kubernetes ☸️</span></span></a>
+  </div>
+
+</div>
+
+<script>
+function copyCode(btn, id){
+  const el=document.getElementById(id);
+  const text=el.innerText;
+  navigator.clipboard.writeText(text).then(()=>{btn.textContent='Copied!';btn.classList.add('copied');setTimeout(()=>{btn.textContent='Copy';btn.classList.remove('copied')},2000);});
+}
+const io=new IntersectionObserver(e=>e.forEach(el=>{if(el.isIntersecting)el.target.classList.add('visible')}),{threshold:0.07});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+</script>
+</body>
+</html>

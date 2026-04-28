@@ -1,0 +1,101 @@
+<!-- grafana.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grafana — CloudHeal Tech Stack</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="tech-shared.css">
+<style>.tech-hero h1 em{color:#b45309}.tech-badge{background:#fef3c7;color:#b45309;border:1px solid #fcd34d}</style>
+</head>
+<body>
+<nav>
+  <a class="nav-back" href="index.html">← Back</a>
+  <a class="nav-logo" href="index.html">Cloud<span>Heal</span></a>
+  <span class="nav-crumb">Tech Stack / <strong>Grafana</strong></span>
+</nav>
+<div class="tech-hero">
+  <div class="tech-hero-left">
+    <div class="tech-badge">Week 5 — Visualization</div>
+    <span class="tech-icon-big">📊</span>
+    <h1>Grafana — <em>Dashboard</em><br>Visualization</h1>
+    <p class="tech-hero-desc">Grafana connects to Prometheus and renders all metrics as beautiful real-time charts. The Self-Healing Cloud Dashboard gives a live view of request rate, latency, CPU, and memory.</p>
+    <div class="tag-row">
+      <span class="tag a">localhost:3000</span>
+      <span class="tag b">Prometheus datasource</span>
+      <span class="tag g">Live charts</span>
+      <span class="tag r">admin / admin123</span>
+    </div>
+  </div>
+  <div class="tech-hero-right">
+    <div class="kv-title">Quick Reference</div>
+    <div class="kv-row"><span class="kv-k">Access URL</span><span class="kv-v">localhost:3000</span></div>
+    <div class="kv-row"><span class="kv-k">Default Login</span><span class="kv-v">admin / admin123</span></div>
+    <div class="kv-row"><span class="kv-k">Data Source</span><span class="kv-v">Prometheus</span></div>
+    <div class="kv-row"><span class="kv-k">Dashboard</span><span class="kv-v">Self-Healing Cloud</span></div>
+    <div class="kv-row"><span class="kv-k">Refresh Rate</span><span class="kv-v">30 seconds</span></div>
+  </div>
+</div>
+<div class="page-body">
+  <div class="section reveal">
+    <div class="sec-lbl">Overview</div>
+    <div class="sec-title">Why Grafana?</div>
+    <div class="cards-grid">
+      <div class="info-card"><div class="ic-icon">📈</div><div class="ic-title">Real-Time Charts</div><div class="ic-desc">Live graphs that auto-refresh every 30 seconds pulling latest Prometheus data.</div></div>
+      <div class="info-card"><div class="ic-icon">🎨</div><div class="ic-title">Custom Dashboards</div><div class="ic-desc">Drag-and-drop panels for request rate, latency, CPU, memory — customized for our project.</div></div>
+      <div class="info-card"><div class="ic-icon">🔔</div><div class="ic-title">Visual Alerts</div><div class="ic-desc">Thresholds shown on charts — red zone when metrics cross dangerous levels.</div></div>
+      <div class="info-card"><div class="ic-icon">🔌</div><div class="ic-title">Multi-Source</div><div class="ic-desc">Can connect to Prometheus, MySQL, Elasticsearch and 50+ data sources simultaneously.</div></div>
+    </div>
+  </div>
+  <div class="divider"></div>
+  <div class="section reveal">
+    <div class="sec-lbl">Architecture</div>
+    <div class="sec-title">Data Flow to Dashboard</div>
+    <div class="flow-wrap">
+      <div class="flow">
+        <div class="flow-step"><div class="flow-box red"><div class="flow-icon">📡</div><div class="flow-label">Prometheus</div><div class="flow-sub">:9090 TSDB</div></div></div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step"><div class="flow-box amber"><div class="flow-icon">🔍</div><div class="flow-label">PromQL Query</div><div class="flow-sub">rate()[1m]</div></div></div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step"><div class="flow-box accent"><div class="flow-icon">📊</div><div class="flow-label">Grafana Panel</div><div class="flow-sub">Chart rendered</div></div></div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step"><div class="flow-box green"><div class="flow-icon">🖥️</div><div class="flow-label">Dashboard</div><div class="flow-sub">localhost:3000</div></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="divider"></div>
+  <div class="section reveal">
+    <div class="sec-lbl">Dashboard Panels</div>
+    <div class="sec-title">PromQL queries used in our Grafana panels</div>
+    <div class="code-wrap">
+      <div class="code-header">
+        <span class="code-filename"><span class="code-dot r"></span><span class="code-dot y"></span><span class="code-dot g"></span>Grafana Panel Queries</span>
+        <button class="copy-btn" onclick="copyCode(this,'graf-queries')">Copy</button>
+      </div>
+      <pre id="graf-queries"><span class="cm"># Panel 1: Request Rate (requests/min)</span>
+<span class="fn">rate</span>(app_request_count_total[<span class="num">1m</span>]) * <span class="num">60</span>
+
+<span class="cm"># Panel 2: Average Latency (ms)</span>
+<span class="fn">rate</span>(app_request_latency_seconds_sum[<span class="num">1m</span>])
+  / <span class="fn">rate</span>(app_request_latency_seconds_count[<span class="num">1m</span>]) * <span class="num">1000</span>
+
+<span class="cm"># Panel 3: Total Requests Counter</span>
+<span class="fn">app_request_count_total</span>
+
+<span class="cm"># Panel 4: 95th Percentile Latency</span>
+<span class="fn">histogram_quantile</span>(<span class="num">0.95</span>,
+  <span class="fn">rate</span>(app_request_latency_seconds_bucket[<span class="num">5m</span>]))</pre>
+    </div>
+  </div>
+  <div class="page-nav">
+    <a class="page-nav-btn" href="prometheus.html">← <span><span class="pnb-lbl">Previous</span><span class="pnb-name">Prometheus 📡</span></span></a>
+    <a class="page-nav-btn" href="python.html"><span><span class="pnb-lbl">Next Tech →</span><span class="pnb-name">Python 🐍</span></span></a>
+  </div>
+</div>
+<script>
+function copyCode(btn,id){const el=document.getElementById(id);navigator.clipboard.writeText(el.innerText).then(()=>{btn.textContent='Copied!';btn.classList.add('copied');setTimeout(()=>{btn.textContent='Copy';btn.classList.remove('copied')},2000);});}
+const io=new IntersectionObserver(e=>e.forEach(el=>{if(el.isIntersecting)el.target.classList.add('visible')}),{threshold:0.07});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+</script>
+</body>
+</html>
