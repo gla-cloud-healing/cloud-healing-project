@@ -48,6 +48,124 @@ The core idea is simple:
 > **When the application becomes unhealthy, the infrastructure should be able to detect the problem and take corrective action automatically.**
 
 ---
+🏗️ Architecture
+                         ┌──────────────────────┐
+                         │       Client         │
+                         └──────────┬───────────┘
+                                    │
+                                    ▼
+                         ┌──────────────────────┐
+                         │    Flask Application │
+                         │      Port: 5000      │
+                         └───────┬───────┬──────┘
+                                 │       │
+                    ┌────────────┘       └─────────────┐
+                    ▼                                  ▼
+             ┌──────────────┐                  ┌──────────────┐
+             │   /health    │                  │   /metrics   │
+             └──────┬───────┘                  └──────┬───────┘
+                    │                                  │
+                    ▼                                  ▼
+          ┌──────────────────┐                ┌──────────────────┐
+          │ Healing Script   │                │    Prometheus    │
+          │ Python Automation │                │     Monitoring   │
+          └────────┬─────────┘                └────────┬─────────┘
+                   │                                   │
+                   │                                   ▼
+                   │                           ┌──────────────────┐
+                   │                           │      Grafana     │
+                   │                           │  Visualization   │
+                   │                           └──────────────────┘
+                   │
+                   ▼
+          ┌──────────────────┐
+          │ Docker Container │
+          │     Restart      │
+          └──────────────────┘
+
+
+
+
+---
+☸️ Kubernetes Architecture
+                    ┌─────────────────────────┐
+                    │    Kubernetes Service   │
+                    │        Port 80          │
+                    └────────────┬────────────┘
+                                 │
+                 ┌───────────────┼───────────────┐
+                 │               │               │
+                 ▼               ▼               ▼
+          ┌─────────────┐ ┌─────────────┐ ┌─────────────┐
+          │   Pod 1     │ │   Pod 2     │ │   Pod 3     │
+          │ Flask App   │ │ Flask App   │ │ Flask App   │
+          │   :5000     │ │   :5000     │ │   :5000     │
+          └─────────────┘ └─────────────┘ └─────────────┘
+                 │               │               │
+                 └───────────────┼───────────────┘
+                                 │
+                       Health Probes
+                                 │
+                    ┌────────────┴────────────┐
+                    │                         │
+              Liveness Probe            Readiness Probe
+                /health                    /health
+
+---
+
+🔄 Self-Healing Workflow
+The self-healing mechanism is implemented in:
+automation/healing_script.py
+
+The workflow follows these stages:
+
+┌───────────────┐
+│ Start Monitor │
+└───────┬───────┘
+        │
+        ▼
+┌────────────────────┐
+│ Check /health      │
+└─────────┬──────────┘
+          │
+          ▼
+     ┌───────────┐
+     │ Healthy?  │
+     └─────┬─────┘
+       YES │ NO
+           │
+     ┌─────▼──────┐
+     │ Continue   │
+     │ Monitoring │
+     └────────────┘
+
+             NO
+             │
+             ▼
+     ┌──────────────────┐
+     │ Record Failure   │
+     └────────┬─────────┘
+              │
+              ▼
+     ┌──────────────────┐
+     │ Track Repeated   │
+     │ Health Failures  │
+     └────────┬─────────┘
+              │
+              ▼
+     ┌──────────────────┐
+     │ Restart Docker   │
+     │    Container     │
+     └────────┬─────────┘
+              │
+              ▼
+     ┌──────────────────┐
+     │ Service Recovers │
+     └──────────────────┘
+---
+
+
+
 
 # 🎯 Why Self-Healing?
 
